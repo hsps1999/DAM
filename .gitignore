@@ -1,0 +1,31 @@
+# Android
+.gradle
+/local.properties
+/build
+/captures
+.externalNativeBuild
+.cxx
+*.iml
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.ipr
+/out
+/library
+
+# Maven
+target/
+.kotlin
+
+# OS Generated
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Secrets
+*.jks
+*.keystore
+
+# Local properties for Fal.ai
+local.properties
