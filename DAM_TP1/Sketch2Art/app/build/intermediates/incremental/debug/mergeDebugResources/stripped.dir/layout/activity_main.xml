@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    tools:context=".ui.main.MainActivity">
+
+    <!-- Header / Title -->
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Sketch to Art"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+        android:textColor="#6750A4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Drawing Area wrapped in CardView -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/canvasCard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/footer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTitle">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <dam_a46104.sketch2art.ui.views.DrawingView
+                android:id="@+id/drawingView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/resultImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:visibility="gone" />
+
+            <!-- Empty State / Placeholder -->
+            <LinearLayout
+                android:id="@+id/emptyState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:alpha="0.3"
+                    android:src="@android:drawable/ic_menu_edit"
+                    app:tint="@android:color/darker_gray" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:alpha="0.5"
+                    android:text="Your masterpiece will appear here"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+            </LinearLayout>
+
+            <!-- Loading Overlay -->
+            <FrameLayout
+                android:id="@+id/loadingOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#80FFFFFF"
+                android:visibility="gone">
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    app:indicatorColor="#6750A4" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Art is being cooked..."
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                    android:textColor="#6750A4" />
+            </FrameLayout>
+
+        </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Bottom Buttons -->
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClear"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="Clear"
+            app:icon="@android:drawable/ic_menu_revert"
+            app:iconGravity="textStart" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGenerate"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#6750A4"
+            android:text="Generate"
+            android:textColor="@android:color/white"
+            app:icon="@android:drawable/ic_menu_manage"
+            app:iconGravity="textStart"
+            app:iconTint="@android:color/white" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

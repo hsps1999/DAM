@@ -1,4 +1,0 @@
-<resources>
-    <string name="app_name">System Info</string>
-    <string name="activity_oncreate_msg">Activity %1$s onCreate</string>
-</resources>

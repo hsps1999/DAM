@@ -1,4 +1,4 @@
-# ISEL — Desenvolvimento de Aplicações Móveis (DAM)
+﻿# ISEL — Desenvolvimento de Aplicações Móveis (DAM)
 
 Repositório centralizado contendo todos os projetos académicos e exercícios desenvolvidos na unidade curricular de DAM (LEIM) no Instituto Superior de Engenharia de Lisboa (ISEL).
 
@@ -6,24 +6,13 @@ Repositório centralizado contendo todos os projetos académicos e exercícios d
 
 ## 📁 Estrutura do Repositório
 
-### [DAM_TP1](file:///C:/ISEL/ISEL_25_26/DAM/DAM_TPs/DAM_TP1)
-- **Exercícios Kotlin:** Introdução à sintaxe de Kotlin, Arrays, Programação Funcional.
-- **Virtual Library:** Exercício prático de Programação Orientada a Objetos em Kotlin.
-- **Relatório:** [README.md](file:///C:/ISEL/ISEL_25_26/DAM/DAM_TPs/DAM_TP1/README.md)
+### 📚 [Trabalho Prático 1 (TP1)](file:///C:/ISEL/ISEL_25_26/DAM/DAM_TP1)
+Pasta contentora de todos os componentes desenvolvidos para a primeira avaliação:
 
-### [HelloWorld](file:///C:/ISEL/ISEL_25_26/DAM/HelloWorld)
-- Primeira aplicação Android (V1 e V2).
-- Exploração de layouts XML, recursos de imagem e internacionalização.
-
-### [SystemInfo](file:///C:/ISEL/ISEL_25_26/DAM/SystemInfo)
-- Aplicação Android para monitorização de recursos do sistema e logs.
-- Estudo de ciclo de vida e monitorização de processos.
-
-### [Sketch2Art](file:///C:/ISEL/ISEL_25_26/DAM/Sketch2Art)
-- **MIP-1 (Mission Impossible Possible):** Aplicação criativa com IA.
-- Transformação de desenhos manuais em arte digital via API Fal.ai.
-- Arquitetura **MVVM**, **Retrofit** e **Material Design 3**.
-- **Relatório:** [README.md](file:///C:/ISEL/ISEL_25_26/DAM/Sketch2Art/README.md)
+- **[Kotlin_TP1](file:///C:/ISEL/ISEL_25_26/DAM/DAM_TP1/Kotlin_TP1):** Exercícios de lógica e sintaxe Kotlin + Secção 6 (Virtual Library).
+- **[HelloWorld](file:///C:/ISEL/ISEL_25_26/DAM/DAM_TP1/HelloWorld):** Primeiras apps Android (V1 e V2).
+- **[SystemInfo](file:///C:/ISEL/ISEL_25_26/DAM/DAM_TP1/SystemInfo):** Monitorização de recursos e logs.
+- **[Sketch2Art](file:///C:/ISEL/ISEL_25_26/DAM/DAM_TP1/Sketch2Art):** MIP-1 (App de IA generativa).
 
 ---
 
@@ -36,6 +25,6 @@ Repositório centralizado contendo todos os projetos académicos e exercícios d
 
 ## 🛠️ Tecnologias Utilizadas
 - **Linguagem:** Kotlin
-- **Ambientes:** IntelliJ IDEA (Kotlin Base) & Android Studio (Mobile)
+- **Ambientes:** IntelliJ IDEA & Android Studio
 - **Arquitetura:** MVVM (Model-View-ViewModel)
-- **Bibliotecas Principais:** Retrofit, Coil, View Binding, Coroutines, StateFlow.
+- **APIs:** Fal.ai (Fast SDXL)
