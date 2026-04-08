@@ -6,13 +6,23 @@ Repositório centralizado contendo todos os projetos académicos e exercícios d
 
 ## 📁 Estrutura do Repositório
 
-### 📚 [Trabalho Prático 1 (TP1)](file:///C:/ISEL/ISEL_25_26/DAM/DAM_TP1)
+### 📚 [Trabalho Prático 1 (TP1)](DAM_TP1)
 Pasta contentora de todos os componentes desenvolvidos para a primeira avaliação:
 
-- **[Kotlin_TP1](file:///C:/ISEL/ISEL_25_26/DAM/DAM_TP1/Kotlin_TP1):** Exercícios de lógica e sintaxe Kotlin + Secção 6 (Virtual Library).
-- **[HelloWorld](file:///C:/ISEL/ISEL_25_26/DAM/DAM_TP1/HelloWorld):** Primeiras apps Android (V1 e V2).
-- **[SystemInfo](file:///C:/ISEL/ISEL_25_26/DAM/DAM_TP1/SystemInfo):** Monitorização de recursos e logs.
-- **[Sketch2Art](file:///C:/ISEL/ISEL_25_26/DAM/DAM_TP1/Sketch2Art):** MIP-1 (App de IA generativa).
+- **[Kotlin_TP1](DAM_TP1/Kotlin_TP1):** Exercícios de lógica e sintaxe Kotlin + Secção 6 (Virtual Library).
+- **[HelloWorld](DAM_TP1/HelloWorld):** Primeiras apps Android (V1 e V2).
+- **[SystemInfo](DAM_TP1/SystemInfo):** Monitorização de recursos e logs.
+- **[Sketch2Art](DAM_TP1/Sketch2Art):** MIP-1 (App de IA generativa).
+
+---
+
+### 📚 [Trabalho Prático 2 (TP2)](DAM_TP2)
+Pasta contentora de todos os componentes desenvolvidos para a segunda avaliação:
+
+- **[Kotlin_TP2](DAM_TP2/Kotlin_TP2):** Exercícios de Kotlin avançado:
+  - **Exercício 1.1 — Event Log Processing:** Processamento de logs de eventos com sequências e higher-order functions.
+  - **Exercício 1.2 — Generics: In-Memory Cache:** Implementação de uma cache em memória com suporte a genéricos.
+- **[CoolWeatherApp](DAM_TP2/CoolWeatherApp):** Aplicação Android de previsão meteorológica.
 
 ---
 
