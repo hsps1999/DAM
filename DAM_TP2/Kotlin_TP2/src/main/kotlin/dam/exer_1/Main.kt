@@ -43,6 +43,4 @@ fun main() {
                 println("Logout(username=${event.username}, timestamp=${event.timeStamp})")
         }
     }
-
-
 }
