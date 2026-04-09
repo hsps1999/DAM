@@ -1,5 +1,5 @@
 package dam.exer_2
-/*
+
 fun main() {
 
     // Cache para freq de palavras (String, Int)
@@ -50,4 +50,4 @@ fun main() {
     println("After evict id 1, size: ${idCache.size()}")
     println("Id 1 after evict -> ${idCache.get(1)}")
 }
-*/
+

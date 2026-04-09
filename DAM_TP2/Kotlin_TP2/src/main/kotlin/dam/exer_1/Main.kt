@@ -1,5 +1,5 @@
 package dam.exer_1
-/*
+
 fun main() {
     val events = listOf(
         Event.Login("alice", 1_000),
@@ -44,4 +44,3 @@ fun main() {
         }
     }
 }
-*/
