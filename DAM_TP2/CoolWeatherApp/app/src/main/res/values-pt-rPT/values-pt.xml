@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lat_label">Latitude</string>
+    <string name="long_label">Longitude</string>
+    <string name="pressure_label">Pressão ao Nível do Mar</string>
+    <string name="wind_dir_label">Direção do Vento</string>
+    <string name="wind_speed_label">Velocidade do Vento</string>
+    <string name="temp_label">Temperatura</string>
+    <string name="time_label">Hora</string>
+    <string name="update_btn">ATUALIZAR</string>
+</resources>

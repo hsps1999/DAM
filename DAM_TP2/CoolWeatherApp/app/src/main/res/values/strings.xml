@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">CoolWeatherApp</string>
+    <string name="lat_label">Latitude</string>
+    <string name="long_label">Longitude</string>
+    <string name="pressure_label">Sea Level Pressure</string>
+    <string name="wind_dir_label">Wind Direction</string>
+    <string name="wind_speed_label">Wind Speed</string>
+    <string name="temp_label">Temperature</string>
+    <string name="time_label">Time</string>
+    <string name="update_btn">UPDATE</string>
+</resources>
