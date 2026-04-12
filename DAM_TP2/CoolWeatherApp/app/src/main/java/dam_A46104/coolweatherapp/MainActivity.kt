@@ -99,35 +99,62 @@ class MainActivity : AppCompatActivity() {
             val weatherImage: ImageView = findViewById(R.id.weatherImage)
             val pressure: TextView = findViewById(R.id.pressureValue)
 
-            // TODO: Aqui irás adicionar findViewById para Temperatura, Vento, etc.
+            // Encontrar as novas TextViews no XML
+            val temperature: TextView = findViewById(R.id.temperatureValue)
+            val windSpeed: TextView = findViewById(R.id.windSpeedValue)
+            val windDir: TextView = findViewById(R.id.windDirValue)
+            val time: TextView = findViewById(R.id.timeValue)
 
             // Atualizar a Pressão
-            pressure.text = "Pressão: " + request.hourly.pressure_msl[12].toString() + " hPa"
+            pressure.text = "${getString(R.string.pressure_label)}: ${request.hourly.pressure_msl[12]} hPa"
 
-            // Lógica para ir buscar a imagem baseada no código do clima
-            val mapt = getWeatherCodeMap()
-            val wCode = mapt.get(request.current_weather.weathercode)
+            // --- NOVA LÓGICA DE IMAGENS (A LER DO XML) ---
 
-            val wImage = when (wCode) {
-                WMO_WeatherCode.CLEAR_SKY,
-                WMO_WeatherCode.MAINLY_CLEAR,
-                WMO_WeatherCode.PARTLY_CLOUDY -> if (day) wCode?.image + "day" else wCode?.image + "night"
-                else -> wCode?.image
+            // Carregar as duas listas do ficheiro arrays.xml
+            val codesArray = resources.getIntArray(R.array.weather_codes)
+            val imagesArray = resources.getStringArray(R.array.weather_images)
+
+            // Código que a API devolve agora
+            val currentCode = request.current_weather.weathercode
+
+            // Procurar em que posição (índice) da lista está o código
+            val index = codesArray.indexOf(currentCode)
+
+            var wImage = ""
+
+            // Se encontrou o código na lista (index diferente de -1)
+            if (index != -1) {
+                val baseImageName = imagesArray[index]
+
+                // Se for céu limpo (0), maioritariamente limpo (1) ou parcialmente nublado (2),
+                // acrescentar o "day" ou "night" ao fim do nome da imagem
+                wImage = when (currentCode) {
+                    0, 1, 2 -> if (day) baseImageName + "day" else baseImageName + "night"
+                    else -> baseImageName
+                }
             }
 
-            val res = resources
+            // 4. Aplicar a imagem na interface
+            val resID = resources.getIdentifier(wImage, "drawable", packageName)
 
-            // Vai buscar o ID dinâmico da imagem.
-            // O getPackageName() ajuda o Android a encontrar a imagem com o nome exato da string 'wImage'
-            val resID = res.getIdentifier(wImage, "drawable", packageName)
-
-            // Segurança extra: só aplica a imagem se ela existir na pasta drawable (resID != 0)
             if (resID != 0) {
                 val drawable = getDrawable(resID)
                 weatherImage.setImageDrawable(drawable)
+            } else {
+                // Prevenção de erros: se a imagem não existir, mete uma por omissão (ex: ic_launcher)
+                weatherImage.setImageResource(R.mipmap.ic_launcher)
             }
 
-            // TODO: Atualizar os outros elementos com dados de 'request.current_weather'
+            // Atualizar os restantes elementos com os dados reais
+            val current = request.current_weather
+
+            temperature.text = "${getString(R.string.temp_label)}: ${current.temperature} °C"
+            windSpeed.text = "${getString(R.string.wind_speed_label)}: ${current.windspeed} km/h"
+            windDir.text = "${getString(R.string.wind_dir_label)}: ${current.winddirection}°"
+
+            // A hora vem no formato "2023-03-10T12:00". Troca do "T" por um espaço
+            val formattedTime = current.time.replace("T", " ")
+            time.text = "${getString(R.string.time_label)}: $formattedTime"
         }
     }
 }
