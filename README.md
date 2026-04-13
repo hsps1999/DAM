@@ -22,7 +22,9 @@ Pasta contentora de todos os componentes desenvolvidos para a segunda avaliaçã
 - **[Kotlin_TP2](DAM_TP2/Kotlin_TP2):** Exercícios de Kotlin avançado:
   - **Exercício 1.1 — Event Log Processing:** Processamento de logs de eventos com sequências e higher-order functions.
   - **Exercício 1.2 — Generics: In-Memory Cache:** Implementação de uma cache em memória com suporte a genéricos.
-- **[CoolWeatherApp](DAM_TP2/CoolWeatherApp):** Aplicação Android de previsão meteorológica.
+  - **Exercício 1.3 — Functions and Lambdas:** Pipeline de dados configurável com funções de ordem superior.
+  - **Exercício 1.4 — Operator Overloading:** Sobrecarga de operadores em classes Kotlin.
+- **[CoolWeatherApp](DAM_TP2/CoolWeatherApp):** Aplicação Android de previsão meteorológica com localização GPS real, 28 ícones de condições meteorológicas, layout landscape e localização em português.
 
 ---
 
@@ -37,4 +39,4 @@ Pasta contentora de todos os componentes desenvolvidos para a segunda avaliaçã
 - **Linguagem:** Kotlin
 - **Ambientes:** IntelliJ IDEA & Android Studio
 - **Arquitetura:** MVVM (Model-View-ViewModel)
-- **APIs:** Fal.ai (Fast SDXL)
+- **APIs:** Fal.ai (Fast SDXL), Open-Meteo, Google Play Services Location
