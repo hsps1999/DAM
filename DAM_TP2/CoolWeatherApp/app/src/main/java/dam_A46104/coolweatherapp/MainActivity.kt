@@ -14,10 +14,22 @@ import com.google.gson.Gson
 import java.io.InputStreamReader
 import java.net.URL
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+
 class MainActivity : AppCompatActivity() {
 
     // Variável para testar os temas de Dia/Noite
     var day = true
+
+    // Ferramenta para obter a localização
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    // Código para saber que a resposta do utilizador é sobre o GPS
+    private val LOCATION_PERMISSION_REQ_CODE = 1000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // 1. O SET THEME TEM DE SER A PRIMEIRA COISA A ACONTECER
@@ -56,9 +68,17 @@ class MainActivity : AppCompatActivity() {
         val longInput = findViewById<EditText>(R.id.longitudeInput)
 
         // 4. Chamada inicial (Lisboa)
+        /*
         val initialLat = latInput.text.toString().toFloatOrNull() ?: 38.076f
         val initialLong = longInput.text.toString().toFloatOrNull() ?: -9.12f
         fetchWeatherData(initialLat, initialLong).start()
+        */
+
+        // Inicializar o cliente de localização da Google
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // Em vez de chamar logo Lisboa, pedir a localização real
+        requestLocationAndUpdateWeather()
 
         // 5. Configurar o botão Update
         btnUpdate.setOnClickListener {
@@ -134,7 +154,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            // 4. Aplicar a imagem na interface
+            // Aplicar a imagem na interface
             val resID = resources.getIdentifier(wImage, "drawable", packageName)
 
             if (resID != 0) {
@@ -155,6 +175,62 @@ class MainActivity : AppCompatActivity() {
             // A hora vem no formato "2023-03-10T12:00". Troca do "T" por um espaço
             val formattedTime = current.time.replace("T", " ")
             time.text = "${getString(R.string.time_label)}: $formattedTime"
+        }
+    }
+
+    // --- LÓGICA DE LOCALIZAÇÃO GPS ---
+    private fun requestLocationAndUpdateWeather() {
+        // 1. Verificar se já há permissão
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Se não houver, pedir ao utilizador (Abre o pop-up do sistema)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                LOCATION_PERMISSION_REQ_CODE
+            )
+        } else {
+            // Se já houver permissão de uma vez anterior, buscar a localização
+            getLocation()
+        }
+    }
+
+    // O Android chama esta função automaticamente quando o utilizador clica em "Permitir" ou "Recusar" no pop-up
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == LOCATION_PERMISSION_REQ_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Utilizador disse SIM
+                getLocation()
+            } else {
+                // Utilizador disse NÃO. Como fallback, mostrar o tempo de Lisboa.
+                fetchWeatherData(38.076f, -9.12f).start()
+            }
+        }
+    }
+
+    private fun getLocation() {
+        // Confirmação de segurança (Exigido pelo Android Studio)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
+
+        // Pede a última localização conhecida ao chip GPS
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null) {
+                // Sucesso! Há GPS. Atualizar as caixas de texto com as coordenadas reais
+                val latInput = findViewById<EditText>(R.id.latitudeInput)
+                val longInput = findViewById<EditText>(R.id.longitudeInput)
+
+                latInput.setText(location.latitude.toString())
+                longInput.setText(location.longitude.toString())
+
+                // Ir à API da meteorologia com as coordenadas do utilizador
+                fetchWeatherData(location.latitude.toFloat(), location.longitude.toFloat()).start()
+            } else {
+                // O GPS pode estar desligado no telemóvel. Fallback para Lisboa.
+                fetchWeatherData(38.076f, -9.12f).start()
+            }
         }
     }
 }

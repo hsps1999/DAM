@@ -45,4 +45,5 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("com.google.code.gson:gson:2.8.9") // Adicionada a dependência do Gson da Google
+    implementation("com.google.android.gms:play-services-location:21.1.0") // GPS
 }
