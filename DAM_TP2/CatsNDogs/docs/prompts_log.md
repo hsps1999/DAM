@@ -49,7 +49,29 @@ Antes de começarmos a implementar, preciso que faças o seguinte por esta ordem
 Não geres código nesta resposta. Só quero confirmar que leste e percebeste tudo antes de avançarmos. Lê literalmente os ficheiros, não inventes.
 
 **Resultado:**
-<preencher Resumo cobriu os pontos pedidos e identificou corretamente o Step 1>
+<Resumo cobriu os pontos pedidos e identificou corretamente o Step 1>
 
 ---
 
+## Prompt 2 — Planeamento do Step 2 (dependências)
+
+**Step do plano:** 2
+**Data:** 2026-04-15
+
+**Objetivo:**
+Obter do agente o plano detalhado para o Step 2 (adicionar dependências de networking, lifecycle e image loading) antes de aplicar qualquer alteração — incluindo ficheiros a modificar, versões específicas das bibliotecas e localização da permissão INTERNET.
+
+**Prompt usado:**
+Vamos avançar para o Step 2 do `docs/08_implementation_plan.md`.
+
+Antes de gerar qualquer alteração, confirma:
+- Que ficheiro vais alterar
+- Que dependências vais adicionar (com versões específicas)
+- Onde vais adicionar a permissão INTERNET
+
+Espera pela minha confirmação antes de aplicar mudanças.
+
+**Resultado:**
+<Ficheiros identificados: app/build.gradle.kts, AndroidManifest.xml>
+
+---
