@@ -75,3 +75,22 @@ Espera pela minha confirmação antes de aplicar mudanças.
 <Ficheiros identificados: app/build.gradle.kts, AndroidManifest.xml>
 
 ---
+
+## Prompt N — Refactor: mover MainActivity para ui/main
+
+**Step do plano:** 15 (correção pós-implementação)
+**Data:** 2026-04-16
+
+**Objetivo:**
+Corrigir um desvio identificado após a conclusão dos Steps 12-15: o agente deixou `MainActivity.kt` na raiz do package em vez de a colocar em `ui/main/`, conforme definido em `docs/06_architecture.md`. Esta entrada documenta o prompt de correção para alinhar a implementação com a arquitetura.
+
+**Prompt usado:**
+Move `MainActivity.kt` da raiz do package para `ui/main/`, conforme definido em docs/06_architecture.md. Atualiza o AndroidManifest.xml em conformidade. Confirma o plano antes de aplicar.
+
+**Resultado:**
+<Ficheiro movido, manifesto atualizado e app a compilar e a correr>
+
+**Notas / problemas:**
+Desvio detetado durante a revisão pós-Step 15. O agente sinalizou correctamente a discrepância no momento da geração ("ficou na raiz porque o manifesto referencia .MainActivity"), mas optou por não mover sem confirmação — comportamento alinhado com agents.md. Decisão: aplicar o move para manter consistência arquitetural com `ui/main/ImageAdapter.kt`.
+
+---

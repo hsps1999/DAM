@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">CatsNDogs</string>
+    <string name="refresh">Refresh</string>
+    <string name="error_loading">Erro ao carregar imagens.</string>
+    <string name="retry">Tentar novamente</string>
+    <string name="image_content_description">Imagem de cão</string>
+
 </resources>
