@@ -9,7 +9,7 @@
 
 ## 1. Overview
 
-Pasta com todos os componentes desenvolvidos para o **Trabalho Prático 2 (TP2)** da disciplina de DAM. O TP2 divide-se em dois blocos: exercícios de Kotlin avançado e o desenvolvimento de uma aplicação Android de meteorologia.
+Pasta com todos os componentes desenvolvidos para o **Trabalho Prático 2 (TP2)** da disciplina de DAM. O TP2 divide-se em dois blocos: exercícios de Kotlin avançado e o desenvolvimento de aplicações Android.
 
 ---
 
@@ -18,7 +18,8 @@ Pasta com todos os componentes desenvolvidos para o **Trabalho Prático 2 (TP2)*
 ```
 DAM_TP2/
 ├── Kotlin_TP2/     → Exercícios de Kotlin avançado (Maven + IntelliJ IDEA)
-└── CoolWeatherApp/ → Aplicação Android de previsão meteorológica (Android Studio)
+├── CoolWeatherApp/ → Aplicação Android de previsão meteorológica (Android Studio)
+└── CatsNDogs/      → Aplicação Android de galeria de imagens com favoritos (Android Studio)
 ```
 
 ---
@@ -44,6 +45,17 @@ Aplicação Android que obtém a previsão meteorológica atual com base nas coo
 - 28 ícones vetoriais de condições meteorológicas
 - Fundos dinâmicos dia/noite e localização em português (PT)
 
+### 📱 [CatsNDogs](CatsNDogs)
+Aplicação Android de galeria de imagens de cães com funcionalidades de favoritos e acesso offline:
+
+- Integração com a **Dog CEO API** (pública, sem autenticação)
+- Lista de imagens aleatórias com RecyclerView + Glide
+- Cache local com **Room** (até 50 imagens, política LRU)
+- Acesso offline com fallback automático para cache
+- Favoritos persistidos (até 5, política FIFO) com barra de miniaturas
+- Ecrã de detalhes por imagem com toggle de favorito
+- Arquitetura MVVM + Repository pattern
+
 ---
 
 ## 4. Tecnologias
@@ -52,3 +64,4 @@ Aplicação Android que obtém a previsão meteorológica atual com base nas coo
 |---|---|
 | **Kotlin_TP2** | Kotlin, Apache Maven, IntelliJ IDEA |
 | **CoolWeatherApp** | Kotlin, Android Studio, Gson, Google Play Services Location, Open-Meteo API |
+| **CatsNDogs** | Kotlin, Android Studio, Retrofit, Gson, Coroutines, Glide, Room, Dog CEO API |

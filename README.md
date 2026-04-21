@@ -25,6 +25,7 @@ Pasta contentora de todos os componentes desenvolvidos para a segunda avaliaçã
   - **Exercício 1.3 — Functions and Lambdas:** Pipeline de dados configurável com funções de ordem superior.
   - **Exercício 1.4 — Operator Overloading:** Sobrecarga de operadores em classes Kotlin.
 - **[CoolWeatherApp](DAM_TP2/CoolWeatherApp):** Aplicação Android de previsão meteorológica com localização GPS real, 28 ícones de condições meteorológicas, layout landscape e localização em português.
+- **[CatsNDogs](DAM_TP2/CatsNDogs):** Aplicação Android de galeria de imagens de cães com favoritos persistidos, cache offline (Room), ecrã de detalhes e arquitetura MVVM + Repository.
 
 ---
 
@@ -39,4 +40,5 @@ Pasta contentora de todos os componentes desenvolvidos para a segunda avaliaçã
 - **Linguagem:** Kotlin
 - **Ambientes:** IntelliJ IDEA & Android Studio
 - **Arquitetura:** MVVM (Model-View-ViewModel)
-- **APIs:** Fal.ai (Fast SDXL), Open-Meteo, Google Play Services Location
+- **APIs:** Fal.ai (Fast SDXL), Open-Meteo, Google Play Services Location, Dog CEO API
+- **Persistência:** Room (SQLite)
