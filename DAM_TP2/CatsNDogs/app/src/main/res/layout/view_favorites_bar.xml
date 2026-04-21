@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Barra horizontal de miniaturas de favoritos (máximo 5 slots).
+    Incluída via <include> dentro da AppBarLayout de cada Activity.
+    Slots sem favorito ficam GONE — gerido pelo FavoritesBarController.
+    app:layout_scrollFlags="noScroll" garante que a barra não desaparece ao fazer scroll.
+-->
+<HorizontalScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/favoritesBarScroll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorSurfaceVariant"
+    android:paddingVertical="6dp"
+    android:scrollbars="none"
+    app:layout_scrollFlags="noScroll">
+
+    <LinearLayout
+        android:id="@+id/favoritesBarLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp"
+        android:gravity="center_vertical">
+
+        <!-- 5 slots de favoritos — visibilidade gerida pelo FavoritesBarController -->
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgFav1"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginHorizontal="4dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/image_content_description"
+            android:visibility="gone"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Circular" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgFav2"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginHorizontal="4dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/image_content_description"
+            android:visibility="gone"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Circular" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgFav3"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginHorizontal="4dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/image_content_description"
+            android:visibility="gone"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Circular" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgFav4"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginHorizontal="4dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/image_content_description"
+            android:visibility="gone"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Circular" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgFav5"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginHorizontal="4dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/image_content_description"
+            android:visibility="gone"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Circular" />
+
+    </LinearLayout>
+
+</HorizontalScrollView>

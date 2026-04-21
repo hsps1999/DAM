@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Miniatura circular de um favorito na FavoritesBar.
+    Dimensão fixa: 52dp × 52dp com margem horizontal de 4dp.
+    A forma circular é obtida via ShapeableImageView com cornerRadius=50%.
+-->
+<com.google.android.material.imageview.ShapeableImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="52dp"
+    android:layout_height="52dp"
+    android:layout_marginHorizontal="4dp"
+    android:scaleType="centerCrop"
+    android:contentDescription="@string/image_content_description"
+    app:shapeAppearanceOverlay="@style/ShapeAppearance.Circular" />
