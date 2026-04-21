@@ -6,4 +6,10 @@
     </style>
 
     <style name="Theme.CatsNDogs" parent="Base.Theme.CatsNDogs" />
+
+    <!-- Estilo de forma circular para as miniaturas de favoritos -->
+    <style name="ShapeAppearance.Circular" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

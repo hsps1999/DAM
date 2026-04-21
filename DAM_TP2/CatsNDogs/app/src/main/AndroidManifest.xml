@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".CatsNDogsApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,6 +23,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--
+            Ecrã de detalhe de imagem.
+            parentActivityName ativa o back arrow e a navegação Up automática.
+        -->
+        <activity
+            android:name=".ui.details.ImageDetailsActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.main.MainActivity" />
+
     </application>
 
 </manifest>

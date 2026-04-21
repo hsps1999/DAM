@@ -16,8 +16,13 @@ import dam_a46104.catsndogs.data.model.ImageItem
  *
  * Usa [ListAdapter] com [DiffUtil] para actualizações eficientes da lista.
  * O carregamento de imagens é delegado ao Glide.
+ *
+ * @param onItemClick Callback invocado quando o utilizador toca num item.
+ *                    Recebe o [ImageItem] correspondente.
  */
-class ImageAdapter : ListAdapter<ImageItem, ImageAdapter.ViewHolder>(DiffCallback) {
+class ImageAdapter(
+    private val onItemClick: (ImageItem) -> Unit
+) : ListAdapter<ImageItem, ImageAdapter.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -37,7 +42,8 @@ class ImageAdapter : ListAdapter<ImageItem, ImageAdapter.ViewHolder>(DiffCallbac
         private val imageView: ImageView = itemView.findViewById(R.id.imageViewDog)
 
         /**
-         * Liga os dados de um [ImageItem] à View, carregando a imagem com Glide.
+         * Liga os dados de um [ImageItem] à View, carregando a imagem com Glide
+         * e registando o click listener para abrir o ecrã de detalhe.
          */
         fun bind(item: ImageItem) {
             Glide.with(imageView.context)
@@ -46,6 +52,8 @@ class ImageAdapter : ListAdapter<ImageItem, ImageAdapter.ViewHolder>(DiffCallbac
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .error(android.R.drawable.ic_menu_report_image)
                 .into(imageView)
+
+            itemView.setOnClickListener { onItemClick(item) }
         }
     }
 

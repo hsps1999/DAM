@@ -16,9 +16,12 @@ sealed class UiState<out T> {
     /**
      * Operação concluída com sucesso.
      *
-     * @property data Resultado da operação.
+     * @property data        Resultado da operação.
+     * @property isFromCache `true` se os dados vieram da cache local (modo offline);
+     *                       `false` se vieram da API. Usado pela UI para mostrar
+     *                       indicador de conteúdo offline.
      */
-    data class Success<T>(val data: T) : UiState<T>()
+    data class Success<T>(val data: T, val isFromCache: Boolean = false) : UiState<T>()
 
     /**
      * Operação falhada.
