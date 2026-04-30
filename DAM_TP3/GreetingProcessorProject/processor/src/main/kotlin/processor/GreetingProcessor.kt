@@ -3,42 +3,21 @@ package processor
 import annotations.Greeting
 import com.google.auto.service.AutoService
 import com.squareup.kotlinpoet.*
-import java.io.File
-import javax.annotation.processing.*
+import javax.annotation.processing.Processor
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.TypeElement
-import javax.tools.Diagnostic
+import javax.annotation.processing.SupportedAnnotationTypes
+import javax.annotation.processing.SupportedSourceVersion
 
 @AutoService(Processor::class)
 @SupportedSourceVersion(SourceVersion.RELEASE_23)
 @SupportedAnnotationTypes("annotations.Greeting")
-class GreetingProcessor : AbstractProcessor() {
+class GreetingProcessor : BaseProcessor() {
 
-    override fun process(
-        annotations: MutableSet<out TypeElement>,
-        roundEnv: RoundEnvironment
-    ): Boolean {
-        val classMethodMap = mutableMapOf<TypeElement, MutableList<ExecutableElement>>()
+    override fun getAnnotationClass() = Greeting::class.java
 
-        for (element in roundEnv.getElementsAnnotatedWith(Greeting::class.java)) {
-            if (element is ExecutableElement) {
-                val enclosingClass = element.enclosingElement as TypeElement
-                classMethodMap.computeIfAbsent(enclosingClass) { mutableListOf() }.add(element)
-            }
-        }
-
-        for ((classElement, methods) in classMethodMap) {
-            generateKotlinWrapperClass(classElement, methods)
-        }
-
-        return true
-    }
-
-    private fun generateKotlinWrapperClass(
-        classElement: TypeElement,
-        methods: List<ExecutableElement>
-    ) {
+    override fun generateClass(classElement: TypeElement, methods: List<ExecutableElement>) {
         val packageName = processingEnv.elementUtils.getPackageOf(classElement).toString()
         val originalClassName = classElement.simpleName.toString()
         val wrapperClassName = "${originalClassName}Wrapper"
@@ -73,25 +52,6 @@ class GreetingProcessor : AbstractProcessor() {
             classBuilder.addFunction(methodBuilder.build())
         }
 
-        val file = FileSpec.builder(packageName, wrapperClassName)
-            .addType(classBuilder.build())
-            .build()
-
-        try {
-            val kaptKotlinGeneratedDir = processingEnv.options["kapt.kotlin.generated"]
-            if (kaptKotlinGeneratedDir != null) {
-                file.writeTo(File(kaptKotlinGeneratedDir))
-            } else {
-                processingEnv.messager.printMessage(
-                    Diagnostic.Kind.ERROR,
-                    "kapt.kotlin.generated not found"
-                )
-            }
-        } catch (e: Exception) {
-            processingEnv.messager.printMessage(
-                Diagnostic.Kind.ERROR,
-                "Error generating Kotlin file: ${e.message}"
-            )
-        }
+        writeToFile(packageName, wrapperClassName, classBuilder.build())
     }
 }
