@@ -6,13 +6,13 @@ package dam.exer_1
 * */
 sealed class Event(val username: String) {
     // Evento de login de utilizador
-    class Login(username: String, val timeStamp: Long) : Event(username)
+    class Login(username: String, val timeStamp: Long): Event(username)
 
     // Evento de compra
-    class Purchase(username: String, val amount: Double, val timeStamp: Long) : Event(username)
+    class Purchase(username: String, val amount: Double, val timeStamp: Long): Event(username)
 
     // Evento de logout de utilizador
-    class Logout(username: String, val timeStamp: Long) : Event(username)
+    class Logout(username: String, val timeStamp: Long): Event(username)
 }
 
 // Filtra a lista para retornar apenas os eventos de um utilizador específico

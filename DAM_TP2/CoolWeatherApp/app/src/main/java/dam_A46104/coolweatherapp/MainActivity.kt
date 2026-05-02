@@ -24,7 +24,12 @@ import com.google.android.gms.location.LocationServices
 class MainActivity : AppCompatActivity() {
 
     // Variável para testar os temas de Dia/Noite
-    var day = true
+    // var day = true
+    companion object {
+        var day = true // Para a memória sobreviver ao "recreate"
+        var currentLat = 38.076f  // Memória da última latitude
+        var currentLong = -9.12f  // Memória da última longitude
+    }
 
     // Ferramenta para obter a localização
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -78,12 +83,24 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Em vez de chamar logo Lisboa, pedir a localização real
-        requestLocationAndUpdateWeather()
+        // requestLocationAndUpdateWeather()
+
+        if (savedInstanceState == null) {
+            // Se for a PRIMEIRA VEZ que a app abre: Pede o GPS real
+            requestLocationAndUpdateWeather()
+        } else {
+            // Se a app foi RECRIADA: Usa a memória exata do companion object!
+            fetchWeatherData(currentLat, currentLong).start()
+        }
 
         // 5. Configurar o botão Update
         btnUpdate.setOnClickListener {
             val lat = latInput.text.toString().toFloatOrNull() ?: 0f
             val long = longInput.text.toString().toFloatOrNull() ?: 0f
+            // GUARDAR NA MEMÓRIA ANTES DE PESQUISAR:
+            currentLat = lat
+            currentLong = long
+
             fetchWeatherData(lat, long).start()
         }
     }
@@ -91,7 +108,6 @@ class MainActivity : AppCompatActivity() {
     // Fazer o pedido à Open-Meteo e converter o JSON
     private fun WeatherAPI_Call(lat: Float, long: Float): WeatherData {
         val reqString = buildString {
-            // Removi todos os espaços inválidos que estavam no código do PDF
             append("https://api.open-meteo.com/v1/forecast?")
             append("latitude=${lat}&longitude=${long}&")
             append("current_weather=true&")
@@ -116,6 +132,16 @@ class MainActivity : AppCompatActivity() {
     // Atualizar a interface gráfica
     private fun updateUI(request: WeatherData) {
         runOnUiThread {
+            // --- LÓGICA DE DIA/NOITE AUTOMÁTICA ---
+            val apiIsDay = request.current_weather.is_day == 1
+
+            if (day != apiIsDay) {
+                day = apiIsDay
+                // Se o estado mudou, a app precisa de ser recriada para mudar o fundo/tema
+                recreate()
+                return@runOnUiThread // Para a execução, para a app recriar
+            }
+
             val weatherImage: ImageView = findViewById(R.id.weatherImage)
             val pressure: TextView = findViewById(R.id.pressureValue)
 
@@ -128,7 +154,7 @@ class MainActivity : AppCompatActivity() {
             // Atualizar a Pressão
             pressure.text = "${getString(R.string.pressure_label)}: ${request.hourly.pressure_msl[12]} hPa"
 
-            // --- NOVA LÓGICA DE IMAGENS (A LER DO XML) ---
+            // --- LÓGICA DE IMAGENS (A LER DO XML) ---
 
             // Carregar as duas listas do ficheiro arrays.xml
             val codesArray = resources.getIntArray(R.array.weather_codes)
@@ -225,8 +251,12 @@ class MainActivity : AppCompatActivity() {
                 latInput.setText(location.latitude.toString())
                 longInput.setText(location.longitude.toString())
 
+                // GUARDAR NA MEMÓRIA ANTES DE PESQUISAR:
+                currentLat = location.latitude.toFloat()
+                currentLong = location.longitude.toFloat()
+
                 // Ir à API da meteorologia com as coordenadas do utilizador
-                fetchWeatherData(location.latitude.toFloat(), location.longitude.toFloat()).start()
+                fetchWeatherData(currentLat, currentLong).start()
             } else {
                 // O GPS pode estar desligado no telemóvel. Fallback para Lisboa.
                 fetchWeatherData(38.076f, -9.12f).start()

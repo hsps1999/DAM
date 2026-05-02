@@ -54,7 +54,7 @@ data class Vec2(val x: Double, val y: Double) : Comparable<Vec2> {
 }
 
 // Challenge
-// Extension function (fora da classe)
+// Extension function
 // para suportar a ordem inversa
 // this é o escalar
 operator fun Double.times(vec: Vec2): Vec2 {

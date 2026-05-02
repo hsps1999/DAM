@@ -14,7 +14,7 @@ fun main() {
     // Processar eventos
     processEvents(events) { event ->
         // O 'when' é exaustivo: trata todos os casos
-        when (event) {
+        when(event) {
             is Event.Login ->
                 println("[LOGIN] ${event.username} logged in at t=${event.timeStamp}.")
             is Event.Purchase ->
@@ -34,7 +34,7 @@ fun main() {
 
     // Processar a lista filtrada
     aliceEvents.forEach { event ->
-        when (event) {
+        when(event) {
             is Event.Login ->
                 println("Login(username=${event.username}, timestamp=${event.timeStamp})")
             is Event.Purchase ->

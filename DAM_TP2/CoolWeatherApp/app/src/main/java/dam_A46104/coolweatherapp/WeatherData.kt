@@ -14,6 +14,7 @@ data class CurrentWeather(
     var windspeed: Float,
     var winddirection: Int,
     var weathercode: Int,
+    var is_day: Int, // Mudar o fundo consoante dia/ noite
     var time: String
 )
 
@@ -22,5 +23,5 @@ data class Hourly(
     var temperature_2m: ArrayList<Float>,
     var weathercode: ArrayList<Int>,
     var pressure_msl: ArrayList<Float>,
-    var windspeed_10m: ArrayList<Float> // Adicionado para bater certo com o URL
+    var windspeed_10m: ArrayList<Float>
 )
