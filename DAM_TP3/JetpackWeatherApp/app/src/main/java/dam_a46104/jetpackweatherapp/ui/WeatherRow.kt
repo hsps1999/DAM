@@ -1,5 +1,5 @@
 package dam_a46104.jetpackweatherapp.ui
-
+/*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,3 +30,5 @@ fun WeatherRow(label: String, value: String) {
         )
     }
 }
+
+ */

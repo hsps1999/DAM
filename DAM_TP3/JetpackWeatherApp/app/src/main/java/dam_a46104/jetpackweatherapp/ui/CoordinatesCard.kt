@@ -1,13 +1,15 @@
 package dam_a46104.jetpackweatherapp.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,8 +17,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import dam_a46104.jetpackweatherapp.ui.theme.Coral
+import dam_a46104.jetpackweatherapp.ui.theme.GlassLight
+import dam_a46104.jetpackweatherapp.ui.theme.TextOnDark
+import dam_a46104.jetpackweatherapp.ui.theme.TextSubtleOnDark
 
 @Composable
 fun CoordinatesCard(
@@ -26,48 +36,100 @@ fun CoordinatesCard(
     onLongitudeChange: (String) -> Unit,
     labelTitle: String,
     labelLatitude: String,
-    labelLongitude: String
+    labelLongitude: String,
+    isOnDark: Boolean = true
 ) {
     var latText by remember(latitude) { mutableStateOf(latitude.toString()) }
     var lonText by remember(longitude) { mutableStateOf(longitude.toString()) }
 
+    val cardColor = if (isOnDark) GlassLight else Color(0x99FFFFFF)
+    val textColor = if (isOnDark) TextOnDark else Color(0xFF1A1A2E)
+    val subtleColor = if (isOnDark) TextSubtleOnDark else Color(0x991A1A2E)
+    val fieldColors = OutlinedTextFieldDefaults.colors(
+        focusedBorderColor = Coral,
+        unfocusedBorderColor = subtleColor,
+        focusedLabelColor = Coral,
+        unfocusedLabelColor = subtleColor,
+        focusedTextColor = textColor,
+        unfocusedTextColor = textColor,
+        cursorColor = Coral
+    )
+
     Card(
-        modifier  = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors    = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = cardColor),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text     = labelTitle,
-                style    = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
+                text = labelTitle.uppercase(),
+                style = TextStyle(
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Medium,
+                    letterSpacing = 1.sp,
+                    color = subtleColor
+                ),
+                modifier = Modifier.padding(bottom = 4.dp)
             )
-            OutlinedTextField(
-                value         = latText,
-                onValueChange = { newValue ->
-                    latText = newValue
-                    onLatitudeChange(newValue)
-                },
-                label = { Text(labelLatitude) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-                singleLine      = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+            Text(
+                text = "WGS-84 · DECIMAL",
+                style = TextStyle(
+                    fontSize = 9.sp,
+                    color = subtleColor
+                ),
+                modifier = Modifier.padding(bottom = 12.dp)
             )
-            OutlinedTextField(
-                value         = lonText,
-                onValueChange = { newValue ->
-                    lonText = newValue
-                    onLongitudeChange(newValue)
-                },
-                label           = { Text(labelLongitude) },
-                modifier        = Modifier.fillMaxWidth(),
-                singleLine      = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
-            )
+            Row(modifier = Modifier.fillMaxWidth()) {
+                OutlinedTextField(
+                    value = latText,
+                    onValueChange = { newValue ->
+                        latText = newValue
+                        onLatitudeChange(newValue)
+                    },
+                    label = {
+                        Text(
+                            labelLatitude.uppercase(),
+                            style = TextStyle(fontSize = 9.sp, letterSpacing = 0.5.sp)
+                        )
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    colors = fieldColors,
+                    textStyle = TextStyle(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = textColor
+                    ),
+                    shape = RoundedCornerShape(12.dp)
+                )
+                OutlinedTextField(
+                    value = lonText,
+                    onValueChange = { newValue ->
+                        lonText = newValue
+                        onLongitudeChange(newValue)
+                    },
+                    label = {
+                        Text(
+                            labelLongitude.uppercase(),
+                            style = TextStyle(fontSize = 9.sp, letterSpacing = 0.5.sp)
+                        )
+                    },
+                    modifier = Modifier.weight(1f),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    colors = fieldColors,
+                    textStyle = TextStyle(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = textColor
+                    ),
+                    shape = RoundedCornerShape(12.dp)
+                )
+            }
         }
     }
 }
