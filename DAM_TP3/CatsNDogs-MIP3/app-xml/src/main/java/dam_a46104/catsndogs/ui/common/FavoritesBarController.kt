@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import dam_a46104.catsndogs.R
-import dam_a46104.catsndogs.data.model.ImageItem
+import dam_a46104.catsndogs.core.model.ImageItem
 
 /**
  * Controller que gere a barra horizontal de miniaturas de favoritos.

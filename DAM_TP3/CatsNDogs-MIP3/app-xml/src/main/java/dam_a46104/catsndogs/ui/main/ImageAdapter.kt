@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import dam_a46104.catsndogs.R
-import dam_a46104.catsndogs.data.model.ImageItem
+import dam_a46104.catsndogs.core.model.ImageItem
 
 /**
  * Adapter para a lista principal de imagens de cães.

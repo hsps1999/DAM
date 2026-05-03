@@ -11,11 +11,11 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import dam_a46104.catsndogs.CatsNDogsApp
 import dam_a46104.catsndogs.R
-import dam_a46104.catsndogs.data.model.ImageItem
-import dam_a46104.catsndogs.data.remote.RetrofitClient
-import dam_a46104.catsndogs.data.repository.ImageRepository
+import dam_a46104.catsndogs.core.model.ImageItem
+import dam_a46104.catsndogs.core.remote.RetrofitClient
+import dam_a46104.catsndogs.core.repository.ImageRepository
 import dam_a46104.catsndogs.ui.common.FavoritesBarController
-import dam_a46104.catsndogs.ui.common.UiState
+import dam_a46104.catsndogs.core.common.UiState
 import dam_a46104.catsndogs.viewmodel.DetailsViewModel
 
 /**
@@ -69,7 +69,7 @@ class ImageDetailsActivity : AppCompatActivity() {
                 is UiState.Error -> {
                     Snackbar.make(
                         findViewById(android.R.id.content),
-                        state.message,
+                        state.messageResId,
                         Snackbar.LENGTH_LONG
                     ).show()
                 }

@@ -5,12 +5,15 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import dam_a46104.catsndogs.R
-import dam_a46104.catsndogs.data.model.ImageItem
-import dam_a46104.catsndogs.data.repository.ImageRepository
-import dam_a46104.catsndogs.ui.common.UiState
+import dam_a46104.catsndogs.core.R
+import dam_a46104.catsndogs.core.common.UiState
+import dam_a46104.catsndogs.core.model.ImageItem
+import dam_a46104.catsndogs.core.repository.ImageRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 /**
@@ -20,7 +23,10 @@ import kotlinx.coroutines.launch
  * do [ImageRepository]. Expõe também o estado de favorito via [isFavorite]
  * e permite alternar esse estado via [toggleFavorite].
  *
- * @param application Application context, necessário para resolver strings de erro.
+ * A partir do MIP-3, [isFavorite] e [favorites] são derivados de Flow do :core
+ * e convertidos para LiveData via [asLiveData].
+ *
+ * @param application Application context, necessário para o [AndroidViewModel].
  * @param repository  Repositório de imagens injectado via [Factory].
  */
 class DetailsViewModel(
@@ -34,24 +40,29 @@ class DetailsViewModel(
     val imageDetail: LiveData<UiState<ImageItem>> = _imageDetail
 
     /**
-     * ID da imagem actualmente carregada.
-     * Usado como fonte para [isFavorite] e [toggleFavorite].
+     * ID da imagem actualmente carregada, como StateFlow para encadear [isFavorite]
+     * via [flatMapLatest] — correctamente cancelado e resubscrito em rotação de ecrã.
      */
-    private val _currentId = MutableLiveData<String>()
+    private val _currentId = MutableStateFlow("")
 
     /**
      * Observa se a imagem actualmente carregada é favorita.
-     * Actualiza automaticamente quando o estado muda em Room.
-     * Usa [switchMap] para reagir a mudanças de [_currentId] (correcta após rotação).
+     * Usa [flatMapLatest]: quando [_currentId] muda, o Flow anterior é cancelado
+     * e um novo é subscrito automaticamente. Convertido para LiveData para os observers XML.
      */
-    val isFavorite: LiveData<Boolean> = _currentId.switchMap { id ->
-        repository.isFavorite(id)
-    }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val isFavorite: LiveData<Boolean> = _currentId
+        .flatMapLatest { id ->
+            if (id.isNotEmpty()) repository.isFavorite(id)
+            else kotlinx.coroutines.flow.flowOf(false)
+        }
+        .asLiveData()
 
     /**
      * Lista de todos os favoritos actuais (para a FavoritesBar).
+     * Convertido de Flow para LiveData.
      */
-    val favorites: LiveData<List<ImageItem>> = repository.getFavorites()
+    val favorites: LiveData<List<ImageItem>> = repository.getFavorites().asLiveData()
 
     /**
      * Carrega os dados de uma imagem a partir do [id] fornecido pelo Intent.
@@ -70,9 +81,7 @@ class DetailsViewModel(
             _imageDetail.value = if (item != null) {
                 UiState.Success(item)
             } else {
-                UiState.Error(
-                    getApplication<Application>().getString(R.string.error_unknown)
-                )
+                UiState.Error(R.string.error_unknown)
             }
         }
     }

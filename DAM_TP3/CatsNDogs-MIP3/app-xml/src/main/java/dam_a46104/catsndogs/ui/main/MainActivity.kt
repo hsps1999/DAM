@@ -13,10 +13,10 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.recyclerview.widget.RecyclerView
 import dam_a46104.catsndogs.CatsNDogsApp
 import dam_a46104.catsndogs.R
-import dam_a46104.catsndogs.data.remote.RetrofitClient
-import dam_a46104.catsndogs.data.repository.ImageRepository
+import dam_a46104.catsndogs.core.remote.RetrofitClient
+import dam_a46104.catsndogs.core.repository.ImageRepository
 import dam_a46104.catsndogs.ui.common.FavoritesBarController
-import dam_a46104.catsndogs.ui.common.UiState
+import dam_a46104.catsndogs.core.common.UiState
 import dam_a46104.catsndogs.ui.details.ImageDetailsActivity
 import dam_a46104.catsndogs.viewmodel.MainViewModel
 
@@ -102,14 +102,14 @@ class MainActivity : AppCompatActivity() {
                     if (state.isFromCache) {
                         Snackbar.make(
                             recyclerView,
-                            R.string.info_offline_cache,
+                            dam_a46104.catsndogs.core.R.string.info_offline_cache,
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
                 }
                 is UiState.Error -> {
                     showLoading(false)
-                    Snackbar.make(recyclerView, state.message, Snackbar.LENGTH_LONG)
+                    Snackbar.make(recyclerView, state.messageResId, Snackbar.LENGTH_LONG)
                         .setAction(getString(R.string.retry)) { viewModel.loadImages() }
                         .show()
                 }
