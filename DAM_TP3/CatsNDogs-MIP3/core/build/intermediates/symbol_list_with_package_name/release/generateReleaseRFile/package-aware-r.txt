@@ -1,5 +1,0 @@
-dam_a46104.catsndogs.core
-string error_no_network
-string error_server
-string error_unknown
-string info_offline_cache

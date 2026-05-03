@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="error_no_network">Sem ligação à internet. Verifica a tua rede.</string>
-    <string name="error_server">Erro no servidor. Tenta novamente mais tarde.</string>
-    <string name="error_unknown">Erro inesperado ao carregar imagens.</string>
-    <string name="info_offline_cache">Sem rede — a mostrar conteúdo guardado localmente.</string>
-</resources>

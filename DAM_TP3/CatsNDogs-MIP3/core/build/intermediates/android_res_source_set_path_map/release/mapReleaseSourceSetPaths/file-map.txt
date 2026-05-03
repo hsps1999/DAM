@@ -1,8 +1,0 @@
-dam_a46104.catsndogs.core-pngs-0 C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\build\generated\res\pngs\release
-dam_a46104.catsndogs.core-updated_navigation_xml-1 C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\build\generated\updated_navigation_xml\release
-dam_a46104.catsndogs.core-mergeReleaseResources-2 C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\build\intermediates\incremental\release\mergeReleaseResources\merged.dir
-dam_a46104.catsndogs.core-mergeReleaseResources-3 C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\build\intermediates\incremental\release\mergeReleaseResources\stripped.dir
-dam_a46104.catsndogs.core-release-4 C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\build\intermediates\merged_res\release\mergeReleaseResources
-dam_a46104.catsndogs.core-release-5 C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\build\intermediates\packaged_res\release\packageReleaseResources
-dam_a46104.catsndogs.core-main-6 C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\src\main\res
-dam_a46104.catsndogs.core-release-7 C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\src\release\res
