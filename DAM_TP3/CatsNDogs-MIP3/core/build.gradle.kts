@@ -45,7 +45,7 @@ dependencies {
     implementation(libs.lifecycle.livedata.ktx)
 
     // Local DB (Room)
-    implementation(libs.room.runtime)
+    api(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 

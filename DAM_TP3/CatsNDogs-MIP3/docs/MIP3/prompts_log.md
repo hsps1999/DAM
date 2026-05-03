@@ -314,3 +314,185 @@ Warning KT-73255 sobre @StringRes em data class mantém-se (não-blocking, regis
 
 ---
 
+### Step M3.4 — Atualizar imports e adaptar ViewModels
+**Prompt User:**
+"Avança"
+"Confirma que FavoritesBarController não precisa de adaptação além dos imports (ainda recebe LiveData do MainViewModel/DetailsViewModel)"
+
+**Ações do Agente:**
+- Modificou `FavoritesBarController.kt`, `ImageAdapter.kt` para usar `core.*`.
+- Modificou `MainViewModel.kt` para remover bloco try/catch e usar `.asLiveData()`.
+- Modificou `DetailsViewModel.kt` para usar `flatMapLatest` + `.asLiveData()`.
+- Modificou `MainActivity.kt` e `ImageDetailsActivity.kt` para usar `state.messageResId`.
+- Fix de string de offline cache em `MainActivity` para `core.R.string.info_offline_cache`.
+- Executou build: `BUILD SUCCESSFUL`.
+- Commit: `refactor(app-xml): fix broken imports and adapt viewmodels to use Flow/UiState from :core`
+
+---
+
+## Milestone M4 — Novo módulo :app-compose
+
+### Step M4.1 — Criar módulo :app-compose
+**Prompt User:**
+"Vamos avançar para o Step M4.1 do `docs/MIP3/04_implementation_plan.md`.
+1. Como vais criar o módulo (New Module no Android Studio? Manual?)
+2. Confirma: Nome, Package, ApplicationId, Min SDK, Template
+3. Alterações ao settings.gradle.kts
+4. Estrutura de pastas que vai ser criada
+5. AGP 9.x: lembra-te que o plugin com.android.application aplica-se via id() direto, não via alias() — mesma regra do M2.1"
+"avança"
+
+**Ações do Agente:**
+- Modificou `settings.gradle.kts` para adicionar `include(":app-compose")`.
+- Criou estrutura manual de ficheiros: `build.gradle.kts`, `AndroidManifest.xml`, `CatsNDogsComposeApp.kt`, e `MainActivity.kt`.
+- Omitiu plugins do Compose e de Kotlin que são geridos automaticamente ou no M4.2 para não partir a compilação base.
+- Executou build: `BUILD SUCCESSFUL`.
+- Commit: `chore: create :app-compose module`
+
+---
+
+### Step M4.2 — Configurar dependências
+**Prompt User:**
+"Avança
+ Confirma que NÃO declaras kotlin("android") nem kotlinOptions { }
+   (mesma armadilha do M2.1)"
+
+**Ações do Agente:**
+- Modificou `gradle/libs.versions.toml` para adicionar as dependências do Compose (BOM 2024.10.00, material3, ui, tooling), navigation-compose (2.8.3), coil-compose (2.7.0) e o plugin `org.jetbrains.kotlin.plugin.compose`.
+- Modificou `app-compose/build.gradle.kts`:
+  - Adicionou `buildFeatures { compose = true }`.
+  - Aplicou o plugin do Compose compiler via `alias(libs.plugins.kotlin.compose)`.
+  - Adicionou as dependências todas mencionadas.
+  - Omitiu `kotlinOptions` e o plugin `kotlin("android")` conforme indicado.
+- Executou build: `BUILD SUCCESSFUL`.
+- Commit: `chore(app-compose): add Compose, Navigation and Coil dependencies`
+
+---
+
+### Step M4.3 — Application class
+**Prompt User:**
+"Vamos avançar para o Step M4.3.
+Confirma que o ImageRepository é construído via lazy + singleton,
+   tal como no :app-xml"
+
+**Ações do Agente:**
+- Modificou `CatsNDogsComposeApp.kt` introduzindo propriedades `by lazy` para `database`, `apiService` e `imageRepository`.
+- Validou que `AndroidManifest.xml` já tinha a tag `android:name=".CatsNDogsComposeApp"` registada durante a sua criação no M4.1.
+- Commit: `feat(app-compose): add Application class with Repository setup`
+
+---
+
+### Step M4.4 — Theme setup
+**Prompt User:**
+"Avança"
+
+**Ações do Agente:**
+- Criou a diretoria `ui/theme` em `app-compose`.
+- Criou os ficheiros base do Material 3: `Color.kt` (paleta clara e escura baseada em roxo moderno), `Type.kt` (tipografia Default Material 3) e `Theme.kt` (suporte a Dynamic Color e alteração do statusBarColor).
+- Executou build: `BUILD SUCCESSFUL`.
+- Commit: `feat(app-compose): add Material 3 theme`
+
+---
+
+### Step M4.5 — `MainViewModel` com StateFlow
+**Prompt User:**
+"Avança"
+
+**Ações do Agente:**
+- Criou a pasta `viewmodel` e o ficheiro `MainViewModel.kt`.
+- Implementou o `MainViewModel` com `StateFlow` e `MutableStateFlow` para observar a UI state e os favoritos reativamente sem a dependência do LiveData.
+- Incluiu a lógica para popular as propriedades utilizando `stateIn` da coroutine flow API, com `SharingStarted.WhileSubscribed(5_000)`.
+- Incluiu o provider factory manual para o `ImageRepository`.
+- Executou build: `BUILD SUCCESSFUL`.
+- Commit: `feat(app-compose): add MainViewModel with StateFlow`
+
+---
+
+### Step M4.6 — `MainScreen` composable
+**Prompt User:**
+"Step M4.6. Mostra-me MainScreen.kt e ImageCard.kt completos antes de aplicar:
+1. Scaffold com TopAppBar e FloatingActionButton
+2. LazyColumn com items
+3. CircularProgressIndicator quando Loading
+4. Snackbar com retry quando Error (resolve messageResId via stringResource)
+5. Snackbar informativa quando Success(isFromCache=true)
+6. Click no item → callback (passa imageId — navegação vem em M4.9)
+7. SEM animações ainda (são M5)
+Espera confirmação."
+"Avança"
+
+**Ações do Agente:**
+- Criou a pasta `ui/main/` e os ficheiros `MainScreen.kt` e `ImageCard.kt`.
+- No `ImageCard.kt`, implementou `Card` com `AsyncImage` (Coil Compose) e informações da raça da imagem, sem animações.
+- No `MainScreen.kt`, geriu a `LazyColumn` a partir da subscrição de `uiState` utilizando `collectAsStateWithLifecycle()`.
+- Lançou Side Effects `LaunchedEffect(state)` para a visualização das `Snackbars` quando a lista vem de cache (informativo) ou de erro (onde adicionou um `actionLabel = "Retry"` a invocar o `loadImages`).
+- Executou build: `BUILD SUCCESSFUL`.
+- Commit: `feat(app-compose): add MainScreen and ImageCard composables`
+
+---
+
+### Step M4.7 — `DetailsScreen` e `DetailsViewModel`
+**Prompt User:**
+"Step M4.7. Mostra-me DetailsViewModel.kt e DetailsScreen.kt completos:
+DetailsViewModel:
+- recebe imageId via factory
+- image: StateFlow<ImageItem?> via repo.findById()
+- isFavorite: StateFlow<Boolean> via repo.isFavorite(id).stateIn(...)
+- toggleFavorite()
+
+DetailsScreen:
+- Scaffold com TopAppBar (back arrow)
+- AsyncImage do Coil em tamanho grande
+- Painel metadata: raça, subraça, ID, URL
+- Botão favorito (estrela vazia/cheia, observa isFavorite)
+- SEM animação no toggle (vem em M5.3)"
+"segue"
+
+**Ações do Agente:**
+- Criou `DetailsViewModel` que utiliza o `ImageRepository` para carregar a imagem e observar o seu estado de favorito usando `stateIn(WhileSubscribed)`.
+- Criou a pasta `ui/details` e o ficheiro `DetailsScreen.kt`.
+- Implementou o `Scaffold` com `TopAppBar`, contendo a ação de regressar (`onNavigateBack`) e o action button de favoritar.
+- Adicionou a visualização do `AsyncImage` em grande destaque e o painel de propriedades do cão/gato (Scrollable column).
+- Validou que o toggle respeita o `isFavorite` (estrela preenchida/vazia), sem animações.
+- Executou build: `BUILD SUCCESSFUL`.
+- Commit: `feat(app-compose): add DetailsScreen and DetailsViewModel`
+
+---
+
+### Step M4.8 — Grelha de Favoritos na Home
+**Prompt User:**
+"segue"
+
+**Ações do Agente:**
+- Criou o `FavoritesBar.kt`, implementando uma `LazyRow` para iterar horizontalmente a lista de favoritos com thumbnails `AsyncImage`. O componente oculta-se automaticamente quando a lista de favoritos (`favorites.isEmpty()`) está vazia.
+- Integrado na `MainScreen.kt`, recolhendo `favorites` do `viewModel.favorites.collectAsStateWithLifecycle()` e exibido através do escopo `item { FavoritesBar(...) }` no topo do `LazyColumn`.
+- Executou build: `BUILD SUCCESSFUL`.
+- Commit: `feat(app-compose): add FavoritesBar to MainScreen`
+
+---
+
+### Step M4.9 — Navegação e MainActivity
+**Prompt User:**
+"segue"
+
+**Ações do Agente:**
+- No `MainActivity.kt`, inicializou o Theme (`CatsNDogsTheme`) e um `Surface`.
+- Implementou o **Navigation Compose** usando um `NavHost` (`startDestination = "main"`) e `rememberNavController()`.
+- Criou as duas rotas base:
+  - `"main"`: Instancia o `MainViewModel` (injetando `app.imageRepository` via factory manual) e delega para o `MainScreen`, passando o callback de navegação para o ecrã de detalhes (`navController.navigate("details/$imageId")`).
+  - `"details/{imageId}"`: Lê o ID dos argumentos, instancia o `DetailsViewModel` (via factory manual) e exibe o `DetailsScreen`, delegando a ação de retroceder para o `navController.popBackStack()`.
+- Executou build: `BUILD SUCCESSFUL`.
+- Commit: `feat(app-compose): implement Navigation Compose routing`
+
+---
+
+### Step M4.10 — Recursos de String
+**Prompt User:**
+"Sim"
+
+**Ações do Agente:**
+- Criou o diretório `app-compose/src/main/res/values/` e o ficheiro `strings.xml`.
+- Mapeou todos os textos estáticos (`"Cats & Dogs"`, `"Details"`, `"Favorites"`, content descriptions e metadata labels) para strings devidamente formatadas.
+- Substituiu as strings hard-coded nos ficheiros `MainScreen.kt`, `DetailsScreen.kt`, `FavoritesBar.kt` e `ImageCard.kt` através da chamada idiomática `stringResource(id = dam_a46104.catsndogs.compose.R.string...)`.
+- Executou build: `BUILD SUCCESSFUL`.
+- Commit: `feat(app-compose): implement string resources for UI texts`

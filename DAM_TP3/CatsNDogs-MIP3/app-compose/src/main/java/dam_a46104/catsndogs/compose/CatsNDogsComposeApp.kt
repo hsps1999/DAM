@@ -11,9 +11,8 @@ class CatsNDogsComposeApp : Application() {
 
     val imageRepository by lazy {
         ImageRepository.getInstance(
-            apiService = apiService,
-            cacheDao = database.cacheDao(),
-            favoriteDao = database.favoriteDao()
+            api = apiService,
+            database = database
         )
     }
 }

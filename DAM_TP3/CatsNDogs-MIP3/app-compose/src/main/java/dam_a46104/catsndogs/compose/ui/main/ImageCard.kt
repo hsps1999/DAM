@@ -32,14 +32,11 @@ fun ImageCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column {
-            val breed = imageItem.breeds.firstOrNull()
-            val unknownBreed = stringResource(id = dam_a46104.catsndogs.compose.R.string.unknown_breed)
-            
             AsyncImage(
                 model = imageItem.url,
                 contentDescription = stringResource(
                     id = dam_a46104.catsndogs.compose.R.string.content_desc_breed,
-                    breed?.name ?: unknownBreed
+                    imageItem.breed
                 ),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -47,23 +44,22 @@ fun ImageCard(
                     .height(250.dp)
             )
             
-            if (breed != null) {
-                Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = imageItem.breed.replaceFirstChar { it.uppercase() },
+                    style = MaterialTheme.typography.titleLarge,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                val subBreed = imageItem.subBreed
+                if (subBreed != null) {
                     Text(
-                        text = breed.name,
-                        style = MaterialTheme.typography.titleLarge,
+                        text = subBreed.replaceFirstChar { it.uppercase() },
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                    if (!breed.bredFor.isNullOrEmpty()) {
-                        Text(
-                            text = breed.bredFor!!,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
                 }
             }
         }

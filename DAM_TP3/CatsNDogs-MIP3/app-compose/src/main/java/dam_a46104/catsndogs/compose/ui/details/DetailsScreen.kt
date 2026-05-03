@@ -11,8 +11,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.StarBorder
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -61,7 +62,7 @@ fun DetailsScreen(
                     // Sem animação no toggle (M5 tratará disto mais tarde)
                     IconButton(onClick = { viewModel.toggleFavorite() }) {
                         Icon(
-                            imageVector = if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarBorder,
+                            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                             contentDescription = stringResource(
                                 id = if (isFavorite) dam_a46104.catsndogs.compose.R.string.content_desc_remove_favorite
                                 else dam_a46104.catsndogs.compose.R.string.content_desc_add_favorite
@@ -84,8 +85,6 @@ fun DetailsScreen(
             }
         } else {
             val currentImage = image!!
-            val breed = currentImage.breeds.firstOrNull()
-            val unknownBreed = stringResource(id = dam_a46104.catsndogs.compose.R.string.unknown_breed)
 
             Column(
                 modifier = Modifier
@@ -97,7 +96,7 @@ fun DetailsScreen(
                     model = currentImage.url,
                     contentDescription = stringResource(
                         id = dam_a46104.catsndogs.compose.R.string.content_desc_breed,
-                        breed?.name ?: unknownBreed
+                        currentImage.breed
                     ),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -109,29 +108,16 @@ fun DetailsScreen(
                     Text(
                         text = stringResource(
                             id = dam_a46104.catsndogs.compose.R.string.label_breed,
-                            breed?.name ?: unknownBreed
+                            currentImage.breed.replaceFirstChar { it.uppercase() }
                         ),
                         style = MaterialTheme.typography.titleLarge
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     
-                    if (!breed?.breedGroup.isNullOrEmpty()) {
+                    val subBreed = currentImage.subBreed
+                    if (subBreed != null) {
                         Text(
-                            text = stringResource(
-                                id = dam_a46104.catsndogs.compose.R.string.label_group,
-                                breed!!.breedGroup!!
-                            ),
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                    }
-                    
-                    if (!breed?.bredFor.isNullOrEmpty()) {
-                        Text(
-                            text = stringResource(
-                                id = dam_a46104.catsndogs.compose.R.string.label_bred_for,
-                                breed!!.bredFor!!
-                            ),
+                            text = "Sub-breed: ${subBreed.replaceFirstChar { it.uppercase() }}",
                             style = MaterialTheme.typography.bodyLarge
                         )
                         Spacer(modifier = Modifier.height(4.dp))
