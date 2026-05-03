@@ -1,9 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.room.gradle.plugin)
 }
-
 
 android {
     namespace = "dam_a46104.catsndogs"
@@ -14,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "dam_a46104.catsndogs"
+        applicationId = "dam_a46104.catsndogs.xml"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -36,40 +33,31 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    room {
-        // Directório de schemas exigido pelo Room Gradle Plugin (2.7+).
-        // exportSchema = false em AppDatabase, por isso a pasta ficará vazia,
-        // mas o plugin requer a declaração do path.
-        schemaDirectory("$projectDir/schemas")
-    }
+    // Bloco room{} removido — Room é responsabilidade do :core.
+    // Plugins ksp e room.gradle.plugin removidos pelo mesmo motivo.
 }
 
 dependencies {
+    // Data layer e business logic via :core
+    implementation(project(":core"))
+
+    // Base Android
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
-    // Networking
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-
-    // Concurrency
+    // Concorrência (viewModelScope nas Activities/ViewModels)
     implementation(libs.kotlinx.coroutines.android)
 
-    // Lifecycle
+    // Lifecycle — ViewModels do :app-xml + .asLiveData() para converter Flow→LiveData
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.lifecycle.livedata.ktx)
 
     // UI
     implementation(libs.androidx.recyclerview)
     implementation(libs.glide)
-
-    // Local DB (Room)
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
