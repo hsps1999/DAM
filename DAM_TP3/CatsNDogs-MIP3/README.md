@@ -1,125 +1,57 @@
-# CatsNDogs 🐶
+# CatsNDogs (MIP-3: Multi-Module Architecture)
 
-Aplicação Android que apresenta imagens aleatórias de cães a partir da [Dog CEO API](https://dog.ceo/dog-api/),
-com suporte a favoritos persistidos, acesso offline e ecrã de detalhes por imagem.
+Bem-vindo à fase MIP-3 do projeto CatsNDogs!
+Esta aplicação foi inicialmente desenvolvida no MIP-2 como um módulo único com UI em XML, focando-se em arquitetura MVVM, persistência offline com Room e integração com a Dog CEO API.
 
-Desenvolvido como exercício prático de DAM (Desenvolvimento de Aplicações Móveis) no ISEL,
-seguindo uma abordagem *planning-first* com documentação Markdown e desenvolvimento assistido por IA.
+Nesta fase (MIP-3), a aplicação foi refatorada para uma arquitetura multi-módulo, dividindo responsabilidades e suportando simultaneamente duas versões executáveis da aplicação: uma baseada em Views clássicas (XML) e outra desenvolvida de raiz em Jetpack Compose.
 
----
+## 🏗 Arquitetura Multi-Módulo
 
-## Funcionalidades
+```mermaid
+graph TD
+    AppXml[":app-xml<br/>Android Application<br/>UI: XML Views + LiveData"]
+    AppCompose[":app-compose<br/>Android Application<br/>UI: Jetpack Compose + StateFlow"]
+    Core[":core<br/>Android Library<br/>Data + Business Logic"]
 
-### Phase 1 — Base
-- Lista de imagens aleatórias de cães (RecyclerView + Glide)
-- Refresh via FAB
-- Indicador de loading (ProgressBar)
-- Tratamento de erros com Snackbar e botão "Retry"
-- Ecrã de detalhes (raça, ID, URL)
+    AppXml -->|implementation project| Core
+    AppCompose -->|implementation project| Core
 
-### Phase 2 — Extensões
-- **Cache local** com Room — até 50 imagens (LRU), persiste entre sessões
-- **Acesso offline** — fallback automático para cache quando sem rede
-- **Favoritos FIFO** — até 5 favoritos persistidos em Room; o mais antigo é removido ao adicionar o 6.º
-- **Barra de favoritos** — miniaturas circulares visíveis em todos os ecrãs; toque lança o detalhe
-- **Toggle de favorito** — botão no ecrã de detalhes para adicionar/remover
+    Core -->|Retrofit + Gson| DogApi["Dog CEO API<br/>(external)"]
+    Core -->|Room| RoomDb["Local SQLite DB<br/>(cache + favorites)"]
 
----
+    style Core fill:#4a90e2,stroke:#2c5f9e,color:#fff
+    style AppXml fill:#e8a04a,stroke:#a06b1f,color:#fff
+    style AppCompose fill:#7ac74f,stroke:#4f8a30,color:#fff
+    style DogApi fill:#999,stroke:#555,color:#fff
+    style RoomDb fill:#999,stroke:#555,color:#fff
+```
 
-## Screenshots
+## 🚀 Como correr cada App
 
-> *(Imagens a adicionar após captura no emulador/dispositivo)*
+O projeto dispõe de duas versões executáveis que partilham a mesma camada de dados (`:core`), incluindo a mesma base de dados local para cache e favoritos.
 
-| Ecrã Principal | Detalhe | Favoritos | Offline |
-|:-:|:-:|:-:|:-:|
-| ![Main](docs/screenshots/main.png) | ![Details](docs/screenshots/details.png) | ![Favorites](docs/screenshots/favorites.png) | ![Offline](docs/screenshots/offline.png) |
-
----
-
-## Como correr o projeto
-
-### Pré-requisitos
-- Android Studio Hedgehog (2023.1) ou superior
-- JDK 11+
-- Emulador ou dispositivo com **Android 7.0+ (API 24)**
-
-### Passos
+**Para compilar e instalar a versão clássica (XML Views):**
 ```bash
-git clone https://github.com/hsps1999/DAM.git
-cd DAM/DAM_TP2/CatsNDogs
+./gradlew :app-xml:installDebug
 ```
 
-1. Abrir a pasta `CatsNDogs` no Android Studio (**File → Open**)
-2. Aguardar o Gradle Sync
-3. Selecionar um emulador/dispositivo
-4. Premir **Run ▶**
-
-Não é necessária nenhuma chave de API — a [Dog CEO API](https://dog.ceo/dog-api/) é pública e sem autenticação.
-
----
-
-## Stack técnico
-
-| Camada | Tecnologia |
-|--------|------------|
-| Linguagem | Kotlin |
-| UI | XML Views (Material Components 3) |
-| Networking | Retrofit 2 + Gson |
-| Concorrência | Kotlin Coroutines |
-| Carregamento de imagens | Glide |
-| Persistência | Room 2.7 (KSP 2) |
-| Arquitetura | MVVM + Repository pattern |
-| Min SDK | 24 (Android 7.0) |
-| Target SDK | 36 |
-
----
-
-## Estrutura do projeto
-
-```
-app/src/main/java/dam_a46104/catsndogs/
-├── data/
-│   ├── local/          # Room: CachedImage, FavoriteEntry, DAOs, AppDatabase
-│   ├── model/          # ImageItem (modelo de domínio)
-│   ├── remote/         # Retrofit: DogApiService, RetrofitClient
-│   └── repository/     # ImageRepository (única fonte de verdade)
-├── ui/
-│   ├── common/         # UiState, FavoritesBarController
-│   ├── details/        # ImageDetailsActivity
-│   └── main/           # MainActivity, ImageAdapter
-├── viewmodel/          # MainViewModel, DetailsViewModel
-└── CatsNDogsApp.kt     # Application class (Room singleton)
+**Para compilar e instalar a versão moderna (Jetpack Compose):**
+```bash
+./gradlew :app-compose:installDebug
 ```
 
-Documentação de desenho em [`docs/`](docs/):
+*(Nota: Podes usar as run configurations do Android Studio para executar qualquer um dos módulos diretamente).*
 
-| Ficheiro | Conteúdo |
-|----------|----------|
-| `01_overview.md` | Propósito e stack |
-| `02_features.md` | Funcionalidades detalhadas |
-| `03_screens.md` | Especificação dos ecrãs |
-| `04_data_model.md` | Modelos de dados |
-| `05_navigation.md` | Navegação entre ecrãs |
-| `06_architecture.md` | Camadas e estrutura de pastas |
-| `07_api_usage.md` | Endpoints e mapeamento |
-| `08_implementation_plan.md` | Plano de implementação Phase 1 |
-| `09_feature_extensions.md` | Extensões Phase 2 |
+## 🛠 Stack Técnico
 
----
+- **Linguagem:** Kotlin
+- **Build System:** Gradle (Kotlin DSL, Version Catalog) / AGP 9.x
+- **Arquitetura:** MVVM, Repository Pattern, Multi-Module
+- **Core Layer:** Retrofit (Networking), Room Database (Persistência)
+- **UI (app-xml):** XML Layouts, LiveData, Glide (Imagens)
+- **UI (app-compose):** Jetpack Compose, Material 3, Navigation Compose, StateFlow, Coil (Imagens)
 
-## API
+## 📚 Documentação
 
-**Dog CEO Dog API** — [dog.ceo/dog-api](https://dog.ceo/dog-api/)
-
-Endpoint utilizado:
-```
-GET https://dog.ceo/api/breeds/image/random/{count}
-```
-
-Devolve URLs de imagens aleatórias de cães. Sem autenticação. Sem rate limiting relevante para uso normal.
-
----
-
-## Licença
-
-Projeto académico — ISEL, Licenciatura em Engenharia Informática e de Computadores, 2025/26.
+Para consultar a documentação detalhada de planeamento, arquitetura e registo de evolução desta fase, acede a:
+👉 [**Documentação MIP-3**](docs/MIP3/)
