@@ -1,6 +1,6 @@
 # CONTEXT.md — CatsNDogs MIP-3
 
-## Estado atual: **M4 concluído — pronto para iniciar M5** 🟢
+## Estado atual: **M5 concluído — pronto para iniciar M6** 🟢
 
 Snapshot atualizado a cada milestone fechado. Serve de "estado-resumo" para o agente AntiGravity contextualizar-se no início de cada sessão sem ter de reler todos os ficheiros do `prompts_log.md`.
 
@@ -51,17 +51,14 @@ Ver histórico completo em `docs/01_overview.md` até `docs/09_feature_extension
 ---
 
 ## O que foi feito no M3 — Refactor `:app-xml` ✅
-Todos os steps do M3 foram concluídos. A aplicação baseada em Views original foi renomeada e ajustada para consumir `:core`.
 - O módulo foi renomeado de `app` para `app-xml`.
 - Os ViewModels foram adaptados para converter `Flow` do `:core` em `LiveData` para a UI de Views usar com Observers (`.asLiveData()`).
 - Refatoração massiva de imports (`data.*` para `core.*`).
 - `FavoritesBarController` foi movido da pasta common para `ui/favorites/`.
-- Aplicação testada com build `BUILD SUCCESSFUL`.
 
 ---
 
 ## O que foi feito no M4 — Novo módulo `:app-compose` ✅
-Todos os steps do M4 foram concluídos. A nova app construída em Jetpack Compose foi desenvolvida com paridade funcional ao `:app-xml`.
 - Criado novo módulo `:app-compose` com dependências de Material 3, Navigation Compose e Coil.
 - Implementada gestão de estado com `StateFlow` e `collectAsStateWithLifecycle()` em todo o módulo.
 - Implementado `NavHost` (`navigation/AppNavigation.kt`) para navegação entre `MainScreen` e `DetailsScreen`.
@@ -71,16 +68,22 @@ Todos os steps do M4 foram concluídos. A nova app construída em Jetpack Compos
 
 ---
 
-## O que vem a seguir: **M5 — Feature exclusiva: Animações**
+## O que foi feito no M5 — Feature exclusiva: Animações ✅
+- Extração do LoadingIndicator para `AnimatedVisibility` (fade + scale) no `MainScreen.kt`.
+- `LazyColumn` animado com `animateContentSize()` para redimensionamentos suaves.
+- Elementos `ImageCard` da `LazyColumn` animados com `Modifier.animateItem()` para reposicionamento fluido (substituição da API descontinuada animateItemPlacement).
+- Ícone de "Favorito" no `DetailsScreen` envolvido em `AnimatedContent` (fade + scale) ao alternar entre preenchido e contorno.
+
+---
+
+## O que vem a seguir: **M6 — Entregáveis finais**
 
 Ver detalhe em `docs/MIP3/04_implementation_plan.md`.
 
-O `:app-compose` está estável, compila sem erros, não crasha no emulador e faz comunicação com a internet perfeitamente. É agora o momento para tirar partido de Jetpack Compose adicionando transições dinâmicas ao UI que não existem no XML.
-
-Sequência do M5:
-1. **M5.1** — Animar `LoadingIndicator` (`AnimatedVisibility` com `fadeIn` + `scaleIn`).
-2. **M5.2** — Animar mudanças na lista (`Modifier.animateContentSize()` e `Modifier.animateItemPlacement()`).
-3. **M5.3** — Animar toggle do favorito (`AnimatedContent` no botão do DetailsScreen).
+Sequência do M6:
+1. **M6.1** — Atualizar o README com detalhes de arquitetura.
+2. **M6.2** — Adicionar screenshots de comparação entre XML e Compose.
+3. **M6.3** — Executar Linting e Cleanup final (ex: `@param:StringRes` warning e otimizações).
 
 ---
 
