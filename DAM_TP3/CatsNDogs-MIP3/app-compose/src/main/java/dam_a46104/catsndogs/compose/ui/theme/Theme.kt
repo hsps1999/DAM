@@ -63,9 +63,20 @@ fun CatsNDogsTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            var context = view.context
+            var activity: Activity? = null
+            while (context is android.content.ContextWrapper) {
+                if (context is Activity) {
+                    activity = context
+                    break
+                }
+                context = context.baseContext
+            }
+            val window = activity?.window
+            if (window != null) {
+                window.statusBarColor = colorScheme.primary.toArgb()
+                WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            }
         }
     }
 
