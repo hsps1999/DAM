@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -31,16 +32,21 @@ fun ImageCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column {
+            val breed = imageItem.breeds.firstOrNull()
+            val unknownBreed = stringResource(id = dam_a46104.catsndogs.compose.R.string.unknown_breed)
+            
             AsyncImage(
                 model = imageItem.url,
-                contentDescription = "Breed: ${imageItem.breeds.firstOrNull()?.name ?: "Unknown"}",
+                contentDescription = stringResource(
+                    id = dam_a46104.catsndogs.compose.R.string.content_desc_breed,
+                    breed?.name ?: unknownBreed
+                ),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(250.dp)
             )
             
-            val breed = imageItem.breeds.firstOrNull()
             if (breed != null) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(

@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import dam_a46104.catsndogs.core.model.ImageItem
@@ -32,7 +33,7 @@ fun FavoritesBar(
 
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
-            text = "Favorites",
+            text = stringResource(id = dam_a46104.catsndogs.compose.R.string.title_favorites),
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
@@ -43,7 +44,10 @@ fun FavoritesBar(
             items(favorites, key = { it.id }) { imageItem ->
                 AsyncImage(
                     model = imageItem.url,
-                    contentDescription = "Favorite ${imageItem.id}",
+                    contentDescription = stringResource(
+                        id = dam_a46104.catsndogs.compose.R.string.content_desc_favorite_image,
+                        imageItem.id
+                    ),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(80.dp)

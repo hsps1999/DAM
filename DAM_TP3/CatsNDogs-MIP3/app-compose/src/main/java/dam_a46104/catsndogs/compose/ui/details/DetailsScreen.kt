@@ -44,7 +44,7 @@ fun DetailsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Details") },
+                title = { Text(stringResource(id = dam_a46104.catsndogs.compose.R.string.title_details)) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -53,7 +53,7 @@ fun DetailsScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(id = dam_a46104.catsndogs.compose.R.string.content_desc_back)
                         )
                     }
                 },
@@ -62,7 +62,10 @@ fun DetailsScreen(
                     IconButton(onClick = { viewModel.toggleFavorite() }) {
                         Icon(
                             imageVector = if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarBorder,
-                            contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
+                            contentDescription = stringResource(
+                                id = if (isFavorite) dam_a46104.catsndogs.compose.R.string.content_desc_remove_favorite
+                                else dam_a46104.catsndogs.compose.R.string.content_desc_add_favorite
+                            ),
                             tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -82,6 +85,7 @@ fun DetailsScreen(
         } else {
             val currentImage = image!!
             val breed = currentImage.breeds.firstOrNull()
+            val unknownBreed = stringResource(id = dam_a46104.catsndogs.compose.R.string.unknown_breed)
 
             Column(
                 modifier = Modifier
@@ -91,7 +95,10 @@ fun DetailsScreen(
             ) {
                 AsyncImage(
                     model = currentImage.url,
-                    contentDescription = breed?.name ?: "Unknown breed",
+                    contentDescription = stringResource(
+                        id = dam_a46104.catsndogs.compose.R.string.content_desc_breed,
+                        breed?.name ?: unknownBreed
+                    ),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -100,14 +107,20 @@ fun DetailsScreen(
 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Breed: ${breed?.name ?: "Unknown"}",
+                        text = stringResource(
+                            id = dam_a46104.catsndogs.compose.R.string.label_breed,
+                            breed?.name ?: unknownBreed
+                        ),
                         style = MaterialTheme.typography.titleLarge
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     
                     if (!breed?.breedGroup.isNullOrEmpty()) {
                         Text(
-                            text = "Group: ${breed!!.breedGroup}",
+                            text = stringResource(
+                                id = dam_a46104.catsndogs.compose.R.string.label_group,
+                                breed!!.breedGroup!!
+                            ),
                             style = MaterialTheme.typography.bodyLarge
                         )
                         Spacer(modifier = Modifier.height(4.dp))
@@ -115,7 +128,10 @@ fun DetailsScreen(
                     
                     if (!breed?.bredFor.isNullOrEmpty()) {
                         Text(
-                            text = "Bred for: ${breed!!.bredFor}",
+                            text = stringResource(
+                                id = dam_a46104.catsndogs.compose.R.string.label_bred_for,
+                                breed!!.bredFor!!
+                            ),
                             style = MaterialTheme.typography.bodyLarge
                         )
                         Spacer(modifier = Modifier.height(4.dp))
@@ -124,13 +140,19 @@ fun DetailsScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     
                     Text(
-                        text = "ID: ${currentImage.id}",
+                        text = stringResource(
+                            id = dam_a46104.catsndogs.compose.R.string.label_id,
+                            currentImage.id
+                        ),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "URL: ${currentImage.url}",
+                        text = stringResource(
+                            id = dam_a46104.catsndogs.compose.R.string.label_url,
+                            currentImage.url
+                        ),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

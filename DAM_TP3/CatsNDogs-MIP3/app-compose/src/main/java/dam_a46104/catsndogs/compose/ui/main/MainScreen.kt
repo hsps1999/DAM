@@ -45,7 +45,7 @@ fun MainScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("Cats & Dogs") },
+                title = { Text(stringResource(id = dam_a46104.catsndogs.compose.R.string.title_home)) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -54,7 +54,7 @@ fun MainScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { viewModel.loadImages() }) {
-                Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
+                Icon(imageVector = Icons.Default.Refresh, contentDescription = stringResource(id = dam_a46104.catsndogs.compose.R.string.content_desc_refresh))
             }
         }
     ) { innerPadding ->
@@ -97,10 +97,11 @@ fun MainScreen(
                 
                 is UiState.Error -> {
                     val errorMessage = stringResource(id = state.messageResId)
+                    val retryLabel = stringResource(id = dam_a46104.catsndogs.compose.R.string.action_retry)
                     LaunchedEffect(state) {
                         val result = snackbarHostState.showSnackbar(
                             message = errorMessage,
-                            actionLabel = "Retry",
+                            actionLabel = retryLabel,
                             duration = SnackbarDuration.Indefinite
                         )
                         if (result == SnackbarResult.ActionPerformed) {
