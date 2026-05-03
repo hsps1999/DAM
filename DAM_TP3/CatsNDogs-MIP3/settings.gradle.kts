@@ -26,3 +26,4 @@ rootProject.name = "CatsNDogs"
 include(":app-xml")
 project(":app-xml").projectDir = file("app-xml")
 include(":core")
+include(":app-compose")
