@@ -1,10 +1,13 @@
-package dam_a46104.catsndogs.ui.common
+package dam_a46104.catsndogs.core.common
+
+import androidx.annotation.StringRes
 
 /**
  * Representa os três estados possíveis de qualquer operação assíncrona na UI.
  *
- * Usado pelos ViewModels para expor estado via `LiveData<UiState<T>>`,
- * garantindo que a UI reage de forma tipada a loading, sucesso e erro.
+ * Usado pelos ViewModels para expor estado via `LiveData<UiState<T>>` ou
+ * `StateFlow<UiState<T>>`, garantindo que a UI reage de forma tipada
+ * a loading, sucesso e erro.
  *
  * @param T Tipo do dado transportado em caso de sucesso.
  */
@@ -26,7 +29,8 @@ sealed class UiState<out T> {
     /**
      * Operação falhada.
      *
-     * @property message Mensagem de erro legível para apresentar na UI.
+     * @property messageResId ID de string resource com a mensagem de erro.
+     *                        Resolvido pelo módulo de UI com `getString(messageResId)`.
      */
-    data class Error(val message: String) : UiState<Nothing>()
+    data class Error(@StringRes val messageResId: Int) : UiState<Nothing>()
 }
