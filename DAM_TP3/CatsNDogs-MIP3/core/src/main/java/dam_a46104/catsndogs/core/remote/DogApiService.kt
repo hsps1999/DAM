@@ -1,6 +1,6 @@
-package dam_a46104.catsndogs.data.remote
+package dam_a46104.catsndogs.core.remote
 
-import dam_a46104.catsndogs.data.model.DogApiResponse
+import dam_a46104.catsndogs.core.model.DogApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 
