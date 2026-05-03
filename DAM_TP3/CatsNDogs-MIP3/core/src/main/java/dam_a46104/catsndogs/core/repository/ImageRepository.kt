@@ -1,14 +1,16 @@
-package dam_a46104.catsndogs.data.repository
+package dam_a46104.catsndogs.core.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
-import dam_a46104.catsndogs.data.local.AppDatabase
-import dam_a46104.catsndogs.data.local.toCachedImage
-import dam_a46104.catsndogs.data.local.toFavoriteEntry
-import dam_a46104.catsndogs.data.local.toImageItem
-import dam_a46104.catsndogs.data.model.ImageItem
-import dam_a46104.catsndogs.data.remote.DogApiService
+import dam_a46104.catsndogs.core.R
+import dam_a46104.catsndogs.core.common.UiState
+import dam_a46104.catsndogs.core.local.AppDatabase
+import dam_a46104.catsndogs.core.local.toCachedImage
+import dam_a46104.catsndogs.core.local.toFavoriteEntry
+import dam_a46104.catsndogs.core.local.toImageItem
+import dam_a46104.catsndogs.core.model.ImageItem
+import dam_a46104.catsndogs.core.remote.DogApiService
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
@@ -17,7 +19,11 @@ import java.io.IOException
  * Única fonte de verdade da aplicação para dados de imagens de cães.
  *
  * Delega na API para fetch e persiste os resultados no [AppDatabase] (Room).
- * Implementa cache LRU de até 50 itens via [dam_a46104.catsndogs.data.local.CacheDao.pruneToLimit].
+ * Implementa cache LRU de até 50 itens via [dam_a46104.catsndogs.core.local.CacheDao.pruneToLimit].
+ *
+ * Expõe streams reativos via [Flow] — cada módulo de UI converte conforme necessário:
+ * - `:app-xml` → `.asLiveData()`
+ * - `:app-compose` → `collectAsStateWithLifecycle()`
  *
  * @property api      Instância de [DogApiService] usada para chamadas de rede.
  * @property database Base de dados Room — resolve os DAOs internamente.
@@ -45,18 +51,17 @@ class ImageRepository private constructor(
      * para o modelo de domínio [ImageItem].
      *
      * **Comportamento offline:** em caso de [IOException] (sem rede, timeout),
-     * tenta devolver o conteúdo em cache Room. Se a cache também estiver vazia,
-     * relança a excepção para o ViewModel propagar [dam_a46104.catsndogs.ui.common.UiState.Error].
+     * tenta devolver o conteúdo em cache Room como [UiState.Success] com
+     * `isFromCache = true`. Se a cache também estiver vazia, devolve
+     * [UiState.Error] com o ID de string apropriado.
      *
-     * @param count Número de imagens a pedir (á API, máximo 50).
-     * @return [Pair] com a lista de [ImageItem] e um flag `isFromCache`:
-     *         `false` = dados frescos da API; `true` = dados do cache offline.
-     * @throws IOException Sem rede E cache vazia.
-     * @throws HttpException Resposta HTTP com código de erro (4xx / 5xx).
-     * @throws Exception Qualquer outro erro inesperado.
+     * @param count Número de imagens a pedir à API (máximo 50).
+     * @return [UiState] com o resultado da operação:
+     *   - [UiState.Success] com dados frescos ou da cache
+     *   - [UiState.Error] com ID de string resource em caso de falha sem fallback
      */
-    suspend fun fetchRandomImages(count: Int): Pair<List<ImageItem>, Boolean> {
-        try {
+    suspend fun fetchRandomImages(count: Int): UiState<List<ImageItem>> {
+        return try {
             val response = api.getRandomImages(count)
             val result = response.message.map { url -> url.toImageItem() }
             cachedImages = result
@@ -65,22 +70,22 @@ class ImageRepository private constructor(
                 cacheDao.insertAll(result.map { it.toCachedImage() })
                 cacheDao.pruneToLimit()
             }
-            return Pair(result, false)
+            UiState.Success(result, isFromCache = false)
         } catch (e: IOException) {
-            // Sem rede ou timeout — tentar cache Room antes de propagar erro
+            // Sem rede ou timeout — tentar cache Room antes de devolver erro
             val cached = getCachedImages()
             if (cached.isNotEmpty()) {
-                cachedImages = cached   // atualiza memória para findById() continuar a funcionar
-                return Pair(cached, true)
+                cachedImages = cached  // atualiza memória para findById() continuar a funcionar
+                UiState.Success(cached, isFromCache = true)
+            } else {
+                UiState.Error(R.string.error_no_network)
             }
-            // Cache vazia: não há nada para mostrar — propagar erro
-            throw e
         } catch (e: HttpException) {
-            // Erro do servidor: não há fallback (o servidor está activo mas respondeu com erro)
-            throw e
+            // Erro do servidor: não há fallback (o servidor respondeu com erro)
+            UiState.Error(R.string.error_server)
         } catch (e: Exception) {
             // Qualquer outro erro inesperado (ex: JSON malformado)
-            throw e
+            UiState.Error(R.string.error_unknown)
         }
     }
 
@@ -90,8 +95,7 @@ class ImageRepository private constructor(
      * 2. Tabela `cached_images` do Room — persiste entre sessões
      * 3. Tabela `favorites` do Room — garante que favoritos sempre carregam
      *
-     * Usado pelo [dam_a46104.catsndogs.viewmodel.DetailsViewModel] para resolver
-     * o item a apresentar sem chamada de rede.
+     * Usado pelo DetailsViewModel para resolver o item a apresentar sem chamada de rede.
      *
      * @param id Identificador único da imagem.
      * @return O [ImageItem] correspondente, ou `null` se não existir em nenhuma camada.
@@ -104,11 +108,11 @@ class ImageRepository private constructor(
 
     /**
      * Devolve todos os itens persistidos em cache Room, do mais recente para o mais antigo.
-     * Máximo de 50 itens (garantido por [dam_a46104.catsndogs.data.local.CacheDao.pruneToLimit]).
+     * Máximo de 50 itens (garantido por [dam_a46104.catsndogs.core.local.CacheDao.pruneToLimit]).
      *
      * @return Lista de [ImageItem] lida do Room via [Dispatchers.IO].
      */
-    suspend fun getCachedImages(): List<ImageItem> =
+    private suspend fun getCachedImages(): List<ImageItem> =
         withContext(Dispatchers.IO) {
             cacheDao.getAllCached().map { it.toImageItem() }
         }
@@ -136,19 +140,22 @@ class ImageRepository private constructor(
     }
 
     /**
-     * Devolve a lista de favoritos como [LiveData], mapeada para [ImageItem].
-     * Ordenada por [dam_a46104.catsndogs.data.local.FavoriteEntry.favoritedAt] ASC (FIFO).
+     * Devolve a lista de favoritos como [Flow], mapeada para [ImageItem].
+     * Ordenada por [dam_a46104.catsndogs.core.local.FavoriteEntry.favoritedAt] ASC (FIFO).
+     *
+     * Cada módulo de UI converte conforme necessário:
+     * - `:app-xml` → `.asLiveData()`
+     * - `:app-compose` → `collectAsStateWithLifecycle()`
      */
-    fun getFavorites(): LiveData<List<ImageItem>> =
+    fun getFavorites(): Flow<List<ImageItem>> =
         favoriteDao.getAll().map { list -> list.map { it.toImageItem() } }
 
     /**
-     * Observa se o item com o dado [id] é favorito.
-     * [LiveData] — actualiza automaticamente quando o estado muda em Room.
+     * Observa se o item com o dado [id] é favorito, via [Flow].
      *
      * @param id Identificador único da imagem.
      */
-    fun isFavorite(id: String): LiveData<Boolean> = favoriteDao.isFavorite(id)
+    fun isFavorite(id: String): Flow<Boolean> = favoriteDao.isFavorite(id)
 
     companion object {
 

@@ -1,6 +1,6 @@
 package dam_a46104.catsndogs.core.local
 
-import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -13,11 +13,8 @@ import androidx.room.Query
  * [dam_a46104.catsndogs.core.repository.ImageRepository], não aqui —
  * o DAO mantém-se simples e testável de forma independente.
  *
- * Funções que devolvem [LiveData] **não são** `suspend` (Room observa automaticamente).
+ * Funções que devolvem [Flow] **não são** `suspend` (Room observa automaticamente).
  * Funções de escrita e contagem **são** `suspend` — chamadas a partir de uma coroutine.
- *
- * Nota: a conversão de [LiveData] para [kotlinx.coroutines.flow.Flow] será feita no M2.7,
- * quando o Repository for migrado para expor Flow diretamente.
  */
 @Dao
 interface FavoriteDao {
@@ -35,10 +32,10 @@ interface FavoriteDao {
 
     /**
      * Devolve todos os favoritos ordenados do mais antigo para o mais recente (FIFO).
-     * [LiveData] — Room actualiza automaticamente quando a tabela muda.
+     * [Flow] — Room actualiza automaticamente quando a tabela muda.
      */
     @Query("SELECT * FROM favorites ORDER BY favoritedAt ASC")
-    fun getAll(): LiveData<List<FavoriteEntry>>
+    fun getAll(): Flow<List<FavoriteEntry>>
 
     /** Número total de favoritos actualmente guardados. */
     @Query("SELECT COUNT(*) FROM favorites")
@@ -52,11 +49,11 @@ interface FavoriteDao {
     suspend fun getOldest(): FavoriteEntry?
 
     /**
-     * Observa (ReactiveX) se o item com o dado [id] é favorito.
-     * [LiveData] — actualiza automaticamente quando o estado muda.
+     * Observa se o item com o dado [id] é favorito.
+     * [Flow] — actualiza automaticamente quando o estado muda.
      */
     @Query("SELECT EXISTS(SELECT 1 FROM favorites WHERE id = :id)")
-    fun isFavorite(id: String): LiveData<Boolean>
+    fun isFavorite(id: String): Flow<Boolean>
 
     /**
      * Versão síncrona de [isFavorite], usada internamente pelo Repository
