@@ -1,4 +1,4 @@
-package dam_a46104.catsndogs.data.local
+package dam_a46104.catsndogs.core.local
 
 import android.content.Context
 import androidx.room.Database
@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
  * Base de dados Room da aplicação CatsNDogs.
  *
  * **Singleton:** aceder sempre via [AppDatabase.getInstance].
- * Inicializado em [dam_a46104.catsndogs.CatsNDogsApp.onCreate] antes de qualquer Activity.
+ * Inicializado na `Application` class de cada módulo de app antes de qualquer Activity.
  *
  * **Versão 2 (Extensão F):** adicionada tabela `favorites` ([FavoriteEntry]).
  * Migração de 1→2 via [MIGRATION_1_2] — preserva os dados da `cached_images` existente.

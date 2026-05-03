@@ -1,8 +1,8 @@
-package dam_a46104.catsndogs.data.local
+package dam_a46104.catsndogs.core.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dam_a46104.catsndogs.data.model.ImageItem
+import dam_a46104.catsndogs.core.model.ImageItem
 
 /**
  * Entidade Room que representa uma imagem guardada em cache local.

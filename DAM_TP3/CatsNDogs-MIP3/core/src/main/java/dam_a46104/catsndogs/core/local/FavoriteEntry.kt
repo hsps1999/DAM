@@ -1,13 +1,13 @@
-package dam_a46104.catsndogs.data.local
+package dam_a46104.catsndogs.core.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dam_a46104.catsndogs.data.model.ImageItem
+import dam_a46104.catsndogs.core.model.ImageItem
 
 /**
  * Entidade Room que representa uma imagem marcada como favorita.
  *
- * Política FIFO: ao inserir o 6.º favorito, o [dam_a46104.catsndogs.data.repository.ImageRepository]
+ * Política FIFO: ao inserir o 6.º favorito, o [dam_a46104.catsndogs.core.repository.ImageRepository]
  * remove o registo com [favoritedAt] mais antigo via [FavoriteDao.getOldest].
  *
  * @property id          Chave primária — igual ao [ImageItem.id].

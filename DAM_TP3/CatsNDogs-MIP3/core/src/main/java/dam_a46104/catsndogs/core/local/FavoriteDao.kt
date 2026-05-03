@@ -1,4 +1,4 @@
-package dam_a46104.catsndogs.data.local
+package dam_a46104.catsndogs.core.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -10,11 +10,14 @@ import androidx.room.Query
  * DAO de acesso à tabela `favorites`.
  *
  * A lógica de negócio FIFO (máx. 5) é gerida pelo
- * [dam_a46104.catsndogs.data.repository.ImageRepository], não aqui —
+ * [dam_a46104.catsndogs.core.repository.ImageRepository], não aqui —
  * o DAO mantém-se simples e testável de forma independente.
  *
  * Funções que devolvem [LiveData] **não são** `suspend` (Room observa automaticamente).
  * Funções de escrita e contagem **são** `suspend` — chamadas a partir de uma coroutine.
+ *
+ * Nota: a conversão de [LiveData] para [kotlinx.coroutines.flow.Flow] será feita no M2.7,
+ * quando o Repository for migrado para expor Flow diretamente.
  */
 @Dao
 interface FavoriteDao {

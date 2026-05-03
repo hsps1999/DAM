@@ -1,4 +1,4 @@
-package dam_a46104.catsndogs.data.local
+package dam_a46104.catsndogs.core.local
 
 import androidx.room.Dao
 import androidx.room.Insert
