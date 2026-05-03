@@ -508,15 +508,37 @@ DetailsScreen:
 - Executou novo build: `BUILD SUCCESSFUL`.
 - Commit: `fix(app-compose): resolve runtime crashes missing internet permission and theme cast`
 
-### Step M5.1 � Animar \LoadingIndicator\
+### Step M5.1 Animar \LoadingIndicator\
 
 **Objetivo:** Substituir o \CircularProgressIndicator\ simples por um \LoadingIndicator\ animado com \AnimatedVisibility\.
 
 **Prompt:** \Step M5.1. Cria ui/common/LoadingIndicator.kt com AnimatedVisibility e substitui no MainScreen.\
 
-**A��es do Agente:**
-- Criou o ficheiro \pp-compose/src/main/java/dam_a46104/catsndogs/compose/ui/common/LoadingIndicator.kt\.
+**Ações do Agente:**
+- Criou o ficheiro \app-compose/src/main/java/dam_a46104/catsndogs/compose/ui/common/LoadingIndicator.kt\.
 - Implementou o composable com \AnimatedVisibility(enter = fadeIn() + scaleIn(0.8f), exit = fadeOut() + scaleOut(0.8f))\.
-- Modificou o \MainScreen.kt\ para usar o \LoadingIndicator\ extra�do do \when\ para que as anima��es de exit pudessem ocorrer corretamente.
-- Commit: \eat(app-compose): animate loading indicator with AnimatedVisibility\
+- Modificou o \MainScreen.kt\ para usar o \LoadingIndicator\ extraído do \when\ para que as animações de exit pudessem ocorrer corretamente.
+- Commit: \feat(app-compose): animate loading indicator with AnimatedVisibility\
+
+
+### Step M5.2 Animar mudanças na lista
+
+**Objetivo:** Animar as transições de reordenação e re-sizing do LazyColumn na \MainScreen\.
+
+**Prompt:** \Step M5.2. Anima LazyColumn no MainScreen com animateContentSize() e os ImageCards com Modifier.animateItem().\
+
+**Ações do Agente:**
+- Modificou o \MainScreen.kt\, adicionando \Modifier.animateContentSize()\ ao \LazyColumn\ e \Modifier.animateItem()\ aos items.
+- Commit em conjunto com M5.3.
+
+### Step M5.3 � Animar toggle do favorito
+
+**Objetivo:** Adicionar transição suave de fade e scale quando o estado do icon de Favorito muda.
+
+**Prompt:** \Step M5.3. Envolve o Icon de Favorite no DetailsScreen num AnimatedContent com fadeIn+scaleIn.\
+
+**Ações do Agente:**
+- Modificou \DetailsScreen.kt\, removendo o comentário placeholder.
+- Envolveu o \Icon\ dentro do \IconButton\ com um bloco \AnimatedContent\, definindo \	ransitionSpec\ usando \	ogetherWith\ para \fadeIn + scaleIn\ e \fadeOut + scaleOut\.
+- Commit: \feat(app-compose): animate list content size, item placement, and favorite toggle\
 

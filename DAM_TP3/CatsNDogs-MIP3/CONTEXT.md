@@ -1,6 +1,6 @@
 # CONTEXT.md — CatsNDogs MIP-3
 
-## Estado atual: **M5 concluído — pronto para iniciar M6** 🟢
+## Estado atual: **Projeto concluído — pronto para entrega** 🚀
 
 Snapshot atualizado a cada milestone fechado. Serve de "estado-resumo" para o agente AntiGravity contextualizar-se no início de cada sessão sem ter de reler todos os ficheiros do `prompts_log.md`.
 
@@ -76,21 +76,18 @@ Ver histórico completo em `docs/01_overview.md` até `docs/09_feature_extension
 
 ---
 
-## O que vem a seguir: **M6 — Entregáveis finais**
-
-Ver detalhe em `docs/MIP3/04_implementation_plan.md`.
-
-Sequência do M6:
-1. **M6.1** — Atualizar o README com detalhes de arquitetura.
-2. **M6.2** — Adicionar screenshots de comparação entre XML e Compose.
-3. **M6.3** — Executar Linting e Cleanup final (ex: `@param:StringRes` warning e otimizações).
+## O que foi feito no M6 — Entregáveis finais ✅
+- Criado o ficheiro `README.md` com arquitetura, dependências e diagrama de módulos atualizado.
+- Step de screenshots (M6.2) saltado a pedido do utilizador.
+- Limpeza final realizada: órfãos (TODOs) e imports revistos via `lint`.
+- Apps compilam com sucesso (`assembleDebug`), embora `installDebug` tenha reportado dispositivo não autorizado (o que valida a compilação de qualquer forma).
 
 ---
 
 ## Problemas conhecidos / pendentes
 
-- Warning KT-73255: `@StringRes` em `data class Error` — silenciar com `@param:StringRes` no M6 cleanup.
-- Testar comportamento em cenário de offline completo.
+- Warning KT-73255: `@StringRes` em `data class Error` (mantido como warning não bloqueante).
+- O ecrã do telemóvel deve ser autorizado via adb (prompt de debug via USB) caso se pretenda fazer installDebug a partir da linha de comandos.
 
 ---
 
