@@ -38,6 +38,7 @@ fun MainScreen(
     onImageClick: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val favorites by viewModel.favorites.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
@@ -69,7 +70,12 @@ fun MainScreen(
                 
                 is UiState.Success -> {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        // Mais tarde em M4.8: item { FavoritesBar(...) }
+                        item {
+                            FavoritesBar(
+                                favorites = favorites,
+                                onImageClick = onImageClick
+                            )
+                        }
                         items(state.data) { imageItem ->
                             ImageCard(
                                 imageItem = imageItem,
