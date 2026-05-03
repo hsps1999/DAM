@@ -2,13 +2,18 @@ package dam_a46104.catsndogs.compose
 
 import android.app.Application
 import dam_a46104.catsndogs.core.local.AppDatabase
+import dam_a46104.catsndogs.core.remote.RetrofitClient
+import dam_a46104.catsndogs.core.repository.ImageRepository
 
 class CatsNDogsComposeApp : Application() {
-    lateinit var appDatabase: AppDatabase
-        private set
+    val database by lazy { AppDatabase.getInstance(this) }
+    val apiService by lazy { RetrofitClient.dogApiService }
 
-    override fun onCreate() {
-        super.onCreate()
-        appDatabase = AppDatabase.getInstance(this)
+    val imageRepository by lazy {
+        ImageRepository.getInstance(
+            apiService = apiService,
+            cacheDao = database.cacheDao(),
+            favoriteDao = database.favoriteDao()
+        )
     }
 }
