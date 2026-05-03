@@ -1,4 +1,4 @@
-package dam_a46104.catsndogs.data.model
+package dam_a46104.catsndogs.core.model
 
 /**
  * Modelo de domínio que representa uma imagem de cão obtida da Dog CEO API.

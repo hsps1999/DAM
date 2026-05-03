@@ -1,4 +1,4 @@
-package dam_a46104.catsndogs.data.model
+package dam_a46104.catsndogs.core.model
 
 /**
  * DTO que representa a resposta da Dog CEO API para o endpoint
