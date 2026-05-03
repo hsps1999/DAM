@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dam_a46104.catsndogs.compose.ui.common.LoadingIndicator
 import dam_a46104.catsndogs.compose.viewmodel.MainViewModel
 import dam_a46104.catsndogs.core.common.UiState
 
@@ -64,9 +65,11 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
+            LoadingIndicator(visible = uiState is UiState.Loading)
+            
             when (val state = uiState) {
                 is UiState.Loading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    // Handled by LoadingIndicator outside when
                 }
                 
                 is UiState.Success -> {
