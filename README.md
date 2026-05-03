@@ -29,6 +29,15 @@ Pasta contentora de todos os componentes desenvolvidos para a segunda avaliaçã
 
 ---
 
+### 📚 [Trabalho Prático 3 (TP3)](DAM_TP3)
+Pasta contentora de todos os componentes desenvolvidos para a terceira avaliação:
+
+- **[GreetingProcessorProject](DAM_TP3/GreetingProcessorProject):** Processador de anotações KSP com `@Greeting` e `@Extract` (regex).
+- **[JetpackWeatherApp](DAM_TP3/JetpackWeatherApp):** Reescrita da CoolWeatherApp com Jetpack Compose, Ktor e StateFlow — inclui favoritos persistidos e fundos animados.
+- **[CatsNDogs-MIP3](DAM_TP3/CatsNDogs-MIP3):** Evolução multi-módulo da CatsNDogs com dois módulos de UI (XML Views + Compose) partilhando a mesma camada de dados.
+
+---
+
 ## 👤 Autor
 - **Nome:** Hugo Spencer Pereira de Sousa
 - **Número de Aluno:** `a46104`
@@ -41,4 +50,7 @@ Pasta contentora de todos os componentes desenvolvidos para a segunda avaliaçã
 - **Ambientes:** IntelliJ IDEA & Android Studio
 - **Arquitetura:** MVVM (Model-View-ViewModel)
 - **APIs:** Fal.ai (Fast SDXL), Open-Meteo, Google Play Services Location, Dog CEO API
-- **Persistência:** Room (SQLite)
+- **Persistência:** Room (SQLite), SharedPreferences
+- **UI:** XML Views, Jetpack Compose
+- **Rede:** Gson (Retrofit), Ktor, kotlinx.serialization
+- **Processamento de Anotações:** KSP (Kotlin Symbol Processing)

@@ -542,3 +542,17 @@ DetailsScreen:
 - Envolveu o \Icon\ dentro do \IconButton\ com um bloco \AnimatedContent\, definindo \	ransitionSpec\ usando \	ogetherWith\ para \fadeIn + scaleIn\ e \fadeOut + scaleOut\.
 - Commit: \feat(app-compose): animate list content size, item placement, and favorite toggle\
 
+
+### Step M6.3 Linting e Cleanup final
+
+**Objetivo:** Limpeza final do projeto para entrega.
+
+**Prompt:** \Step M6.3. ./gradlew lint, Remove TODOs orfãos, Remove imports não usados, Confirma que ./gradlew :app-xml:installDebug e ./gradlew :app-compose:installDebug funcionam, Atualiza CONTEXT.md final, Commit: chore: final cleanup and lint fixes\
+
+**Ações do Agente:**
+- Executou \./gradlew lint\ com sucesso.
+- Procurou por TODOs e removeu o TODO orfão no \data_extraction_rules.xml\.
+- Verificou que as apps compilam e testou \installDebug\ (o qual construiu com sucesso o package, falhando a instalação apenas devido à não-autorização do dispositivo Android na ponte adb).
+- Atualizou o \CONTEXT.md\ confirmando o projeto como \pronto para entrega\.
+- Commit final: \chore: final cleanup and lint fixes\
+
