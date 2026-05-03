@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">CatsNDogs</string>
+    <string name="refresh">Refresh</string>
+    <string name="error_loading">Erro ao carregar imagens.</string>
+    <string name="retry">Tentar novamente</string>
+    <string name="image_content_description">Imagem de cão</string>
+
+    <!-- Extensão B — mensagens de erro tipadas -->
+    <string name="error_no_network">Sem ligação à internet. Verifica a tua rede.</string>
+    <string name="error_server">Erro no servidor. Tenta novamente mais tarde.</string>
+    <string name="error_unknown">Erro inesperado ao carregar imagens.</string>
+
+    <!-- Extensão E — indicador de conteúdo offline -->
+    <string name="info_offline_cache">Sem rede — a mostrar conteúdo guardado localmente.</string>
+
+    <!-- Extensão F — favoritos -->
+    <string name="favorite_add">Adicionar aos favoritos</string>
+    <string name="favorite_remove">Remover dos favoritos</string>
+
+</resources>

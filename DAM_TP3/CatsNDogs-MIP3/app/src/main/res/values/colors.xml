@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Cores base -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Paleta principal da app -->
+    <color name="primary">#FF6B35</color>
+    <color name="primary_dark">#CC5520</color>
+    <color name="primary_container">#FFE0D0</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="secondary">#2D4A3E</color>
+    <color name="secondary_container">#B7D5C9</color>
+    <color name="background">#FFF8F5</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="on_surface">#1C1C1E</color>
+    <color name="error">#B00020</color>
+</resources>
