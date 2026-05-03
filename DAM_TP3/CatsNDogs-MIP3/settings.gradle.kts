@@ -23,5 +23,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "CatsNDogs"
-include(":app")
+include(":app-xml")
+project(":app-xml").projectDir = file("app-xml")
 include(":core")

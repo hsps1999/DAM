@@ -1,0 +1,4 @@
+int string error_no_network 0x0
+int string error_server 0x0
+int string error_unknown 0x0
+int string info_offline_cache 0x0

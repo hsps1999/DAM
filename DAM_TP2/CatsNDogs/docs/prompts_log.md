@@ -243,10 +243,4 @@ Inclui:
 
 Espera pela minha confirmação antes de aplicar.
 
-**Resultado:**
-<preencher após resposta do agente>
-
-**Notas / problemas:**
-Screenshots adicionados manualmente após geração do README. Verificar que os nomes dos ficheiros de imagem no README correspondem aos nomes reais em docs/screenshots/.
-
 ---

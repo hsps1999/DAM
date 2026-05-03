@@ -56,6 +56,15 @@ Ambas as apps devem consumir **exatamente o mesmo `:core`**, sem duplicar lógic
 17. Kotlin DSL (`build.gradle.kts`) em todos os módulos.
 18. Centralizar versões em `gradle/libs.versions.toml` (version catalog) — se ainda não existir, criar no início do M2.
 19. Min SDK 24, Target SDK alinhado com o do MIP-2.
+20. **AGP 9.x — aplicação de plugins em submodules:** plugins já no
+    classpath via `pluginManagement` (como `com.android.library`,
+    `com.android.application`) devem ser aplicados via
+    `id("com.android.library")` direto, **não** via `alias(...)` com
+    `version.ref`. Usar `alias()` para estes provoca o erro
+    "plugin already on classpath with unknown version".
+
+    Aplica-se a: `:core`, `:app-xml`, `:app-compose`.
+    Confirmado durante M2.1.
 
 ### Comportamento em caso de dúvida
 

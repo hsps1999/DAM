@@ -10,7 +10,8 @@ data class WeatherData(
     val timezone: String,
     @SerialName("current_weather")
     val currentWeather: CurrentWeather,
-    val hourly: Hourly
+    val hourly: Hourly,
+    val daily: Daily
 )
 
 @Serializable
@@ -33,5 +34,17 @@ data class Hourly(
     @SerialName("pressure_msl")
     val pressureMsl: List<Float>,
     @SerialName("windspeed_10m")
-    val windspeed10m: List<Float>
+    val windspeed10m: List<Float>,
+    @SerialName("apparent_temperature")
+    val apparentTemperature: List<Float>,
+    @SerialName("relativehumidity_2m")
+    val relativeHumidity2m: List<Int>,
+    val visibility: List<Float>
+)
+
+@Serializable
+data class Daily(
+    val time: List<String>,
+    @SerialName("uv_index_max")
+    val uvIndexMax: List<Float>
 )

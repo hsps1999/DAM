@@ -23,7 +23,10 @@ object WeatherApiClient {
             append("https://api.open-meteo.com/v1/forecast?")
             append("latitude=${lat}&longitude=${lon}&")
             append("current_weather=true&")
-            append("hourly=temperature_2m,weathercode,pressure_msl,windspeed_10m")
+            append("hourly=temperature_2m,weathercode,pressure_msl,windspeed_10m,")
+            append("apparent_temperature,relativehumidity_2m,visibility&")
+            append("daily=uv_index_max&")
+            append("timezone=auto")
         }
         println("Getting URL: $reqString")
         return try {

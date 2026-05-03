@@ -66,6 +66,7 @@ fun WeatherBackground(weathercode: Int, isDay: Boolean, content: @Composable () 
                 Brush.verticalGradient(listOf(topColor, bottomColor))
             )
     ) {
+        WeatherParticles(weathercode = weathercode)
         content()
     }
 }

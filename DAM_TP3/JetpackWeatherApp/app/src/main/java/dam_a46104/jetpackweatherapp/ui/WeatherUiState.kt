@@ -11,5 +11,9 @@ data class WeatherUiState(
     val time: String            = "",
     val isDay: Boolean          = true,
     val isLoading: Boolean      = false,
-    val errorMessage: String?   = null
+    val errorMessage: String?   = null,
+    val feelsLike: Float        = 0f,
+    val humidity: Int           = 0,
+    val visibility: Float       = 0f,
+    val uvIndex: Float          = 0f
 )

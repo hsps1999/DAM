@@ -1,0 +1,6 @@
+R_DEF: Internal format may change without notice
+local
+string error_no_network
+string error_server
+string error_unknown
+string info_offline_cache

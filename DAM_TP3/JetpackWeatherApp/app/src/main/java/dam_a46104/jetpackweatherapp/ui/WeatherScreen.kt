@@ -20,10 +20,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,21 +41,23 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dam_a46104.jetpackweatherapp.R
+import dam_a46104.jetpackweatherapp.data.FavoriteLocation
 import dam_a46104.jetpackweatherapp.data.WmoWeatherCode
 import dam_a46104.jetpackweatherapp.ui.theme.Coral
+import dam_a46104.jetpackweatherapp.ui.theme.JetpackWeatherAppTheme
 import dam_a46104.jetpackweatherapp.ui.theme.TextOnDark
 import dam_a46104.jetpackweatherapp.ui.theme.TextSubtleOnDark
 import dam_a46104.jetpackweatherapp.viewmodel.WeatherViewModel
-import androidx.compose.ui.tooling.preview.Preview
-import dam_a46104.jetpackweatherapp.ui.theme.JetpackWeatherAppTheme
 
 @Composable
 fun WeatherUI(weatherViewModel: WeatherViewModel = viewModel()) {
     val uiState by weatherViewModel.uiState.collectAsState()
+    val favorites by weatherViewModel.favorites.collectAsState()
     val configuration = LocalConfiguration.current
     val context = LocalContext.current
 
@@ -73,26 +76,40 @@ fun WeatherUI(weatherViewModel: WeatherViewModel = viewModel()) {
                 wIcon = wIcon,
                 uiState = uiState,
                 isOnDark = isOnDark,
+                favorites = favorites,
                 onLatitudeChange = { newValue ->
                     newValue.toFloatOrNull()?.let { weatherViewModel.updateLatitude(it) }
                 },
                 onLongitudeChange = { newValue ->
                     newValue.toFloatOrNull()?.let { weatherViewModel.updateLongitude(it) }
                 },
-                onUpdateButtonClick = { weatherViewModel.fetchWeather() }
+                onLocationPicked = { lat, lon ->
+                    weatherViewModel.onLocationPicked(lat, lon)
+                },
+                onUpdateButtonClick = { weatherViewModel.fetchWeather() },
+                onAddFavorite = { name -> weatherViewModel.addFavorite(name) },
+                onFavoriteDelete = { weatherViewModel.deleteFavorite(it) },
+                onFavoriteTap = { weatherViewModel.onFavoriteTap(it) }
             )
         } else {
             PortraitWeatherUI(
                 wIcon = wIcon,
                 uiState = uiState,
                 isOnDark = isOnDark,
+                favorites = favorites,
                 onLatitudeChange = { newValue ->
                     newValue.toFloatOrNull()?.let { weatherViewModel.updateLatitude(it) }
                 },
                 onLongitudeChange = { newValue ->
                     newValue.toFloatOrNull()?.let { weatherViewModel.updateLongitude(it) }
                 },
-                onUpdateButtonClick = { weatherViewModel.fetchWeather() }
+                onLocationPicked = { lat, lon ->
+                    weatherViewModel.onLocationPicked(lat, lon)
+                },
+                onUpdateButtonClick = { weatherViewModel.fetchWeather() },
+                onAddFavorite = { name -> weatherViewModel.addFavorite(name) },
+                onFavoriteDelete = { weatherViewModel.deleteFavorite(it) },
+                onFavoriteTap = { weatherViewModel.onFavoriteTap(it) }
             )
         }
     }
@@ -109,28 +126,45 @@ fun TemperatureHero(
 ) {
     val textColor = if (isOnDark) TextOnDark else Color(0xFF1A1A2E)
     val subtleColor = if (isOnDark) TextSubtleOnDark else Color(0x991A1A2E)
-    val tempSize = if (large) 96.sp else 72.sp
+    val tempSize = if (large) 128.sp else 88.sp
+    val iconSize = if (large) 90.dp else 64.dp
 
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
         Text(
             text = buildAnnotatedString {
-                withStyle(SpanStyle(fontSize = tempSize, fontWeight = FontWeight.Black, color = textColor)) {
+                withStyle(
+                    SpanStyle(
+                        fontSize = tempSize,
+                        fontWeight = FontWeight.Black,
+                        color = textColor
+                    )
+                ) {
                     append(temperature.toInt().toString())
                 }
-                withStyle(SpanStyle(fontSize = (tempSize.value * 0.4f).sp, fontWeight = FontWeight.Light, color = subtleColor)) {
+                withStyle(
+                    SpanStyle(
+                        fontSize = (tempSize.value * 0.3f).sp,
+                        fontWeight = FontWeight.Light,
+                        color = subtleColor
+                    )
+                ) {
                     append("°")
                 }
             }
         )
-        Spacer(modifier = Modifier.width(12.dp))
         if (wIcon != 0) {
+            Spacer(modifier = Modifier.width(8.dp))
             Image(
                 painter = painterResource(id = wIcon),
                 contentDescription = null,
-                modifier = Modifier.size(if (large) 80.dp else 60.dp)
+                modifier = Modifier.size(iconSize)
             )
         }
     }
+
     Spacer(modifier = Modifier.height(4.dp))
     Text(
         text = locationLabel,
@@ -143,16 +177,74 @@ fun TemperatureHero(
 }
 
 @Composable
+fun MetricGrid(
+    uiState: WeatherUiState,
+    isOnDark: Boolean
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Max),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            MetricCard(
+                label = stringResource(R.string.wind_speed),
+                value = uiState.windspeed.toInt().toString(),
+                unit = "km/h · ${windDirection(uiState.winddirection)}",
+                icon = Icons.Default.Air,
+                isOnDark = isOnDark,
+                modifier = Modifier.weight(1f).fillMaxHeight()
+            )
+            MetricCard(
+                label = stringResource(R.string.sea_level_pressure),
+                value = uiState.seaLevelPressure.toInt().toString(),
+                unit = "hPa",
+                icon = Icons.Default.Speed,
+                isOnDark = isOnDark,
+                modifier = Modifier.weight(1f).fillMaxHeight()
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Max),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            MetricCard(
+                label = stringResource(R.string.humidity),
+                value = "${uiState.humidity}",
+                unit = "%",
+                icon = Icons.Default.WaterDrop,
+                isOnDark = isOnDark,
+                modifier = Modifier.weight(1f).fillMaxHeight()
+            )
+            MetricCard(
+                label = stringResource(R.string.visibility),
+                value = String.format("%.1f", uiState.visibility),
+                unit = "km",
+                icon = Icons.Default.Visibility,
+                isOnDark = isOnDark,
+                modifier = Modifier.weight(1f).fillMaxHeight()
+            )
+        }
+    }
+}
+
+@Composable
 fun PortraitWeatherUI(
     wIcon: Int,
     uiState: WeatherUiState,
     isOnDark: Boolean,
+    favorites: List<FavoriteLocation>,
     onLatitudeChange: (String) -> Unit,
     onLongitudeChange: (String) -> Unit,
-    onUpdateButtonClick: () -> Unit
+    onLocationPicked: (Float, Float) -> Unit,
+    onUpdateButtonClick: () -> Unit,
+    onAddFavorite: (String) -> Unit,
+    onFavoriteDelete: (FavoriteLocation) -> Unit,
+    onFavoriteTap: (FavoriteLocation) -> Unit
 ) {
-    val textColor = if (isOnDark) TextOnDark else Color(0xFF1A1A2E)
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -165,10 +257,10 @@ fun PortraitWeatherUI(
         TemperatureHero(
             temperature = uiState.temperature,
             wIcon = wIcon,
-            locationLabel = "${uiState.latitude}, ${uiState.longitude}", // para chamar a localização das coordenadas reais em vez de Lisbon que estava hardcoded
+            locationLabel = "${uiState.latitude}, ${uiState.longitude}",
             timeLabel = "${uiState.time} LOCAL · ${
                 WmoWeatherCode.fromCode(uiState.weathercode)?.name?.replace("_", " ") ?: ""
-            }",
+            } · FEELS ${uiState.feelsLike.toInt()}° · UV ${uiState.uvIndex.toInt()}",
             isOnDark = isOnDark,
             large = true
         )
@@ -180,6 +272,7 @@ fun PortraitWeatherUI(
             longitude = uiState.longitude,
             onLatitudeChange = onLatitudeChange,
             onLongitudeChange = onLongitudeChange,
+            onLocationPicked = onLocationPicked,
             labelTitle = stringResource(R.string.coordinates),
             labelLatitude = stringResource(R.string.latitude),
             labelLongitude = stringResource(R.string.longitude),
@@ -187,38 +280,23 @@ fun PortraitWeatherUI(
         )
 
         if (uiState.isLoading) {
-            CircularProgressIndicator(color = Coral, modifier = Modifier.align(Alignment.CenterHorizontally))
+            CircularProgressIndicator(
+                color = Coral,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
         } else if (uiState.errorMessage != null) {
             Text(text = uiState.errorMessage, color = Coral)
         } else {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Max),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                MetricCard(
-                    label = stringResource(R.string.wind_speed),
-                    value = uiState.windspeed.toInt().toString(),
-                    unit = "km/h · ${windDirection(uiState.winddirection)}",
-                    icon = Icons.Default.Air,
-                    isOnDark = isOnDark,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                )
-                MetricCard(
-                    label = stringResource(R.string.sea_level_pressure),
-                    value = uiState.seaLevelPressure.toInt().toString(),
-                    unit = "hPa",
-                    icon = Icons.Default.Speed,
-                    isOnDark = isOnDark,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                )
-            }
+            MetricGrid(uiState = uiState, isOnDark = isOnDark)
         }
+
+        FavoritesBar(
+            favorites = favorites,
+            isOnDark = isOnDark,
+            onFavoriteTap = onFavoriteTap,
+            onFavoriteDelete = onFavoriteDelete,
+            onAddFavorite = onAddFavorite
+        )
 
         Button(
             onClick = onUpdateButtonClick,
@@ -247,9 +325,14 @@ fun LandscapeWeatherUI(
     wIcon: Int,
     uiState: WeatherUiState,
     isOnDark: Boolean,
+    favorites: List<FavoriteLocation>,
     onLatitudeChange: (String) -> Unit,
     onLongitudeChange: (String) -> Unit,
-    onUpdateButtonClick: () -> Unit
+    onLocationPicked: (Float, Float) -> Unit,
+    onUpdateButtonClick: () -> Unit,
+    onAddFavorite: (String) -> Unit,
+    onFavoriteDelete: (FavoriteLocation) -> Unit,
+    onFavoriteTap: (FavoriteLocation) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -270,13 +353,13 @@ fun LandscapeWeatherUI(
                 locationLabel = "${uiState.latitude}, ${uiState.longitude}",
                 timeLabel = "${uiState.time} · ${
                     WmoWeatherCode.fromCode(uiState.weathercode)?.name?.replace("_", " ") ?: ""
-                }",
+                } · FEELS ${uiState.feelsLike.toInt()}° · UV ${uiState.uvIndex.toInt()}",
                 isOnDark = isOnDark,
                 large = false
             )
         }
 
-        // Coluna direita — coordenadas + metrics + botão
+        // Coluna direita — coordenadas + metrics + favoritos + botão
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -289,6 +372,7 @@ fun LandscapeWeatherUI(
                 longitude = uiState.longitude,
                 onLatitudeChange = onLatitudeChange,
                 onLongitudeChange = onLongitudeChange,
+                onLocationPicked = onLocationPicked,
                 labelTitle = stringResource(R.string.coordinates),
                 labelLatitude = stringResource(R.string.latitude),
                 labelLongitude = stringResource(R.string.longitude),
@@ -300,23 +384,16 @@ fun LandscapeWeatherUI(
             } else if (uiState.errorMessage != null) {
                 Text(text = uiState.errorMessage, color = Coral)
             } else {
-                MetricCard(
-                    label = stringResource(R.string.wind_speed),
-                    value = uiState.windspeed.toInt().toString(),
-                    unit = "km/h · ${windDirection(uiState.winddirection)}",
-                    icon = Icons.Default.Air,
-                    isOnDark = isOnDark,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                MetricCard(
-                    label = stringResource(R.string.sea_level_pressure),
-                    value = uiState.seaLevelPressure.toInt().toString(),
-                    unit = "hPa",
-                    icon = Icons.Default.Speed,
-                    isOnDark = isOnDark,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                MetricGrid(uiState = uiState, isOnDark = isOnDark)
             }
+
+            FavoritesBar(
+                favorites = favorites,
+                isOnDark = isOnDark,
+                onFavoriteTap = onFavoriteTap,
+                onFavoriteDelete = onFavoriteDelete,
+                onAddFavorite = onAddFavorite
+            )
 
             Button(
                 onClick = onUpdateButtonClick,
@@ -354,9 +431,14 @@ fun WeatherUIPreview() {
                 wIcon = 0,
                 uiState = WeatherUiState(),
                 isOnDark = true,
+                favorites = emptyList(),
                 onLatitudeChange = {},
                 onLongitudeChange = {},
-                onUpdateButtonClick = {}
+                onLocationPicked = { _, _ -> },
+                onUpdateButtonClick = {},
+                onAddFavorite = {},
+                onFavoriteDelete = {},
+                onFavoriteTap = {}
             )
         }
     }

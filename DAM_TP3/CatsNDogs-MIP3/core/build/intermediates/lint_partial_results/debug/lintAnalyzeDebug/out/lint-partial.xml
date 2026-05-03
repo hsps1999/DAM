@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 9.1.1" type="partial_results">
+    <map id="UnusedResources">
+        <location id="R.string.info_offline_cache"
+            file="${:core*debug*MAIN*sourceProvider*0*resDir*0}/values/strings.xml"
+            line="9"
+            column="13"
+            startOffset="468"
+            endLine="9"
+            endColumn="38"
+            endOffset="493"/>
+        <entry
+            name="model"
+            string="string[error_no_network(U),error_server(U),error_unknown(U),info_offline_cache(D)];;;;"/>
+    </map>
+
+</incidents>

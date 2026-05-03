@@ -1,0 +1,14 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\src\main\AndroidManifest.xml:2:1-13
+INJECTED from C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\src\main\AndroidManifest.xml:2:1-13
+	package
+		INJECTED from C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\src\main\AndroidManifest.xml
+uses-sdk
+INJECTED from C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\src\main\AndroidManifest.xml
+INJECTED from C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\ISEL\ISEL_25_26\DAM\DAM_TPs\DAM_TP3\CatsNDogs-MIP3\core\src\main\AndroidManifest.xml

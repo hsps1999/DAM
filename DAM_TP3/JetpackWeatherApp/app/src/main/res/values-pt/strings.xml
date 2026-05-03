@@ -4,6 +4,8 @@
     <string name="coordinates">Coordenadas</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+    <string name="confirm_location">Confirmar Localização</string>
+    <string name="pick_location">Selecionar Localização</string>
     <string name="temperature">Temperatura</string>
     <string name="wind_speed">Velocidade do Vento</string>
     <string name="wind_direction">Direção do Vento</string>
@@ -12,4 +14,15 @@
     <string name="update_weather">Atualizar Tempo</string>
     <string name="loading">A carregar…</string>
     <string name="error_fetch">Erro ao obter dados meteorológicos</string>
+    <string name="favorites">Favoritos</string>
+    <string name="add_favorite">Adicionar Favorito</string>
+    <string name="delete_favorite">Apagar Favorito</string>
+    <string name="no_favorites">Sem favoritos ainda</string>
+    <string name="favorite_name">Nome da localização</string>
+    <string name="cancel">Cancelar</string>
+    <string name="save">Guardar</string>
+    <string name="feels_like">Sensação Térmica</string>
+    <string name="humidity">Humidade</string>
+    <string name="visibility">Visibilidade</string>
+    <string name="uv_index">Índice UV</string>
 </resources>
