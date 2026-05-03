@@ -494,5 +494,29 @@ DetailsScreen:
 - Criou o diretório `app-compose/src/main/res/values/` e o ficheiro `strings.xml`.
 - Mapeou todos os textos estáticos (`"Cats & Dogs"`, `"Details"`, `"Favorites"`, content descriptions e metadata labels) para strings devidamente formatadas.
 - Substituiu as strings hard-coded nos ficheiros `MainScreen.kt`, `DetailsScreen.kt`, `FavoritesBar.kt` e `ImageCard.kt` através da chamada idiomática `stringResource(id = dam_a46104.catsndogs.compose.R.string...)`.
-- Executou build: `BUILD SUCCESSFUL`.
-- Commit: `feat(app-compose): implement string resources for UI texts`
+- Executou build: `BUILD FAILED` (vários problemas detetados).
+
+**Ações Corretivas (Fixes para M4):**
+- Copiados os diretórios `mipmap` e os respetivos `ic_launcher_*.xml` do `:app-xml` para o `:app-compose` de forma a suportar os ícones pedidos no Manifest.
+- Adicionado um `themes.xml` (com base em `Theme.Material.Light.NoActionBar`) e referenciado no `AndroidManifest.xml` para resolver falta de atributos de tema.
+- No `core/build.gradle.kts`, substituída a dependência de Room de `implementation` para `api(libs.room.runtime)` para garantir transitividade ao `:app-compose`.
+- No `CatsNDogsComposeApp.kt`, corrigidos os argumentos do `ImageRepository.getInstance(...)` (não precisa de DAOs explícitos).
+- No `DetailsScreen.kt` e `ImageCard.kt`, corrigidas referências inexistentes a `breeds`, `breedGroup` e `bredFor` porque a nossa API apenas suporta `breed` e `subBreed`. Smart casts resolvidos com a extração de variáveis locais.
+- No `DetailsScreen.kt`, corrigido o ícone inexistente `StarBorder` para os standard `Icons.Filled.FavoriteBorder` e `Icons.Filled.Favorite`.
+- Adicionadas permissões `INTERNET` e `ACCESS_NETWORK_STATE` ao `AndroidManifest.xml` (pois a app crashava silenciosamente ao tentar fazer chamadas de rede à Dog API).
+- No `Theme.kt`, adicionada validação e *unwrap* seguro do `ContextWrapper` para extrair a `Activity` corretamente sem originar um `ClassCastException` quando usada em conjunto com o `NavHost`.
+- Executou novo build: `BUILD SUCCESSFUL`.
+- Commit: `fix(app-compose): resolve runtime crashes missing internet permission and theme cast`
+
+### Step M5.1 � Animar \LoadingIndicator\
+
+**Objetivo:** Substituir o \CircularProgressIndicator\ simples por um \LoadingIndicator\ animado com \AnimatedVisibility\.
+
+**Prompt:** \Step M5.1. Cria ui/common/LoadingIndicator.kt com AnimatedVisibility e substitui no MainScreen.\
+
+**A��es do Agente:**
+- Criou o ficheiro \pp-compose/src/main/java/dam_a46104/catsndogs/compose/ui/common/LoadingIndicator.kt\.
+- Implementou o composable com \AnimatedVisibility(enter = fadeIn() + scaleIn(0.8f), exit = fadeOut() + scaleOut(0.8f))\.
+- Modificou o \MainScreen.kt\ para usar o \LoadingIndicator\ extra�do do \when\ para que as anima��es de exit pudessem ocorrer corretamente.
+- Commit: \eat(app-compose): animate loading indicator with AnimatedVisibility\
+

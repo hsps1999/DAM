@@ -1,5 +1,6 @@
 package dam_a46104.catsndogs.compose.ui.main
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -71,19 +72,23 @@ fun MainScreen(
                 is UiState.Loading -> {
                     // Handled by LoadingIndicator outside when
                 }
-                
                 is UiState.Success -> {
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .animateContentSize()
+                    ) {
                         item {
                             FavoritesBar(
                                 favorites = favorites,
                                 onImageClick = onImageClick
                             )
                         }
-                        items(state.data) { imageItem ->
+                        items(items = state.data, key = { it.id }) { imageItem ->
                             ImageCard(
                                 imageItem = imageItem,
-                                onClick = onImageClick
+                                onClick = onImageClick,
+                                modifier = Modifier.animateItem()
                             )
                         }
                     }

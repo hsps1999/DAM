@@ -1,5 +1,11 @@
 package dam_a46104.catsndogs.compose.ui.details
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -59,16 +65,24 @@ fun DetailsScreen(
                     }
                 },
                 actions = {
-                    // Sem animação no toggle (M5 tratará disto mais tarde)
                     IconButton(onClick = { viewModel.toggleFavorite() }) {
-                        Icon(
-                            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                            contentDescription = stringResource(
-                                id = if (isFavorite) dam_a46104.catsndogs.compose.R.string.content_desc_remove_favorite
-                                else dam_a46104.catsndogs.compose.R.string.content_desc_add_favorite
-                            ),
-                            tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        AnimatedContent(
+                            targetState = isFavorite,
+                            transitionSpec = {
+                                (scaleIn(initialScale = 0.5f) + fadeIn()) togetherWith
+                                (scaleOut(targetScale = 0.5f) + fadeOut())
+                            },
+                            label = "favorite_toggle"
+                        ) { fav ->
+                            Icon(
+                                imageVector = if (fav) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                                contentDescription = stringResource(
+                                    id = if (fav) dam_a46104.catsndogs.compose.R.string.content_desc_remove_favorite
+                                    else dam_a46104.catsndogs.compose.R.string.content_desc_add_favorite
+                                ),
+                                tint = if (fav) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
                 }
             )
