@@ -9,6 +9,7 @@ import java.awt.event.ActionListener
 import javax.swing.SwingUtilities
 import kotlin.coroutines.CoroutineContext
 import kotlin.system.exitProcess
+import kotlinx.coroutines.channels.Channel
 
 enum class Variant {
     BLOCKING,         // Request1Blocking
@@ -118,8 +119,32 @@ interface Contributors: CoroutineScope {
                 }.setUpCancellation()
             }
             CHANNELS -> {  // Performing requests concurrently and showing progress
+                /*
                 launch(Dispatchers.Default) {
                     loadContributorsChannels(service, req) { users, completed ->
+                        withContext(Dispatchers.Main) {
+                            updateResults(users, startTime, completed)
+                        }
+                    }
+                }.setUpCancellation()
+                */
+                launch(Dispatchers.Default) {
+                    // 1. Criação do canal de comunicação (tubo)
+                    val progressChannel = Channel<Pair<List<User>, Boolean>>()
+
+                    // 2. Coroutine Produtora (Faz os pedidos de rede)
+                    launch(Dispatchers.Default) {
+                        loadContributorsChannels(service, req) { users, completed ->
+                            // Envia os dados para o canal em vez de chamar a UI diretamente
+                            progressChannel.send(Pair(users, completed))
+                        }
+                        // É fundamental fechar o canal quando a produção termina
+                        progressChannel.close()
+                    }
+
+                    // 3. Coroutine Consumidora (Atualiza a UI)
+                    // O loop 'for' suspende a execução se o canal estiver vazio e termina automaticamente quando o canal for fechado
+                    for ((users, completed) in progressChannel) {
                         withContext(Dispatchers.Main) {
                             updateResults(users, startTime, completed)
                         }
