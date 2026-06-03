@@ -25,26 +25,37 @@ fun main() = runBlocking {
     // Write system and model
     println("✨ Using: ${assistant.getSystem()} ${assistant.model}\n")
 
-    // Display a welcome message
-    println("💬 Type your questions and press Enter to chat with the AI.")
+    // Ask the user to choose the mode
+    println("🔧 Choose mode:")
+    println("   [1] Chat  — general questions and answers")
+    println("   [2] Sentiment analysis  — rates text on a 1-7 scale and returns JSON")
+    print("➡️  Enter 1 or 2: ")
+    val modeInput = readlnOrNull()?.trim()
+    val sentimentMode = modeInput == "2"
+
+    if (sentimentMode) {
+        println("\n📊 Sentiment analysis mode active.")
+        println("💬 Enter any text and the AI will rate its sentiment (1=Very Negative … 7=Very Positive).")
+    } else {
+        println("\n💬 Chat mode active. Type your questions and press Enter.")
+    }
     println("💬 Press Ctrl+D (Unix/Mac) or Ctrl+Z (Windows) to exit.\n")
 
     // Main interaction loop
     while (true) {
         println("➖➖➖➖➖➖➖➖➖➖")
-        // Ask for question input and read it from the console
-        print("🧠 Your question: ")
+        val prompt = if (sentimentMode) "📝 Text to analyse: " else "🧠 Your question: "
+        print(prompt)
         val input = readlnOrNull() ?: break
 
-        // If blank input, write a help message and continue to ask for input
         if (input.isBlank()) {
-            println("⚠️ Please enter a question or press Ctrl+D to exit.")
+            println("⚠️ Please enter some text or press Ctrl+D to exit.")
             continue
         }
 
-        // Process input
-        val output = assistant.processInput(input)
-        println("\n🤖 Answer: $output\n\n")
+        val output = if (sentimentMode) assistant.analyzeSentiment(input) else assistant.processInput(input)
+        val label = if (sentimentMode) "📊 Sentiment result" else "🤖 Answer"
+        println("\n$label: $output\n\n")
     }
 
     // Bye message

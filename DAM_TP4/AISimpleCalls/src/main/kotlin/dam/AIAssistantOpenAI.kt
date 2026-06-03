@@ -55,10 +55,18 @@ class AIAssistantOpenAI(override val properties: Properties) : AIAssistant {
                     .put("content", prompt)
             )
 
+        // Read optional temperature and max_tokens from config
+        val temperature = properties.getProperty("TEMPERATURE")?.toDoubleOrNull()
+        val maxTokens = properties.getProperty("MAX_TOKENS")?.toIntOrNull()
+
         // Build the complete request body with model selection and messages
         val requestBody = JSONObject()
-            .put("model", model)  // Specify which model to use
+            .put("model", model)
             .put("messages", messagesArray)
+            .apply {
+                if (temperature != null) put("temperature", temperature)
+                if (maxTokens != null) put("max_tokens", maxTokens)
+            }
             .toString()  // Convert to JSON string
 
         // Configure the HTTP request with proper headers and authentication

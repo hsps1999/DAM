@@ -116,6 +116,45 @@ interface AIAssistant {
     }
 
     /**
+     * Builds a prompt that instructs the model to perform sentiment analysis.
+     * The model must respond exclusively in JSON with a rating (1-7) and justification.
+     *
+     * Scale: 1=Very Negative, 2=Negative, 3=Slightly Negative, 4=Neutral,
+     *        5=Slightly Positive, 6=Positive, 7=Very Positive
+     *
+     * @param input The text to analyse
+     * @return A formatted prompt string with sentiment analysis instructions
+     */
+    fun buildSentimentPrompt(input: String): String {
+        return """
+            You are a sentiment analysis engine. Your only task is to evaluate the sentiment of the text provided.
+            Respond exclusively with a valid JSON object — no markdown, no explanation outside the JSON.
+            Use the following 7-point scale:
+              1 = Very Negative
+              2 = Negative
+              3 = Slightly Negative
+              4 = Neutral
+              5 = Slightly Positive
+              6 = Positive
+              7 = Very Positive
+            Required JSON format:
+            {"rating": <integer 1-7>, "justification": "<one sentence explaining the rating>"}
+            Text to analyse: "$input"
+            """.trimIndent()
+    }
+
+    /**
+     * Performs sentiment analysis on the given input text.
+     *
+     * @param input The text to analyse
+     * @return JSON string with rating and justification
+     */
+    suspend fun analyzeSentiment(input: String): String {
+        val formattedPrompt = buildSentimentPrompt(input)
+        return apiCallWithBackoff(formattedPrompt)
+    }
+
+    /**
      * Calls the Gemini API with an exponential backoff retry mechanism.
      * This method will automatically retry failed requests due to rate limiting (HTTP 429),
      * implementing an exponential backoff strategy to avoid overwhelming the API.
