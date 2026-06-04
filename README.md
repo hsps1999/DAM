@@ -38,6 +38,18 @@ Pasta contentora de todos os componentes desenvolvidos para a terceira avaliaç�
 
 ---
 
+### 📚 [Trabalho Prático 4 (TP4)](DAM_TP4)
+Pasta contentora de todos os componentes desenvolvidos para a quarta avaliação:
+
+- **[intro-coroutines](DAM_TP4/intro-coroutines):** Tutorial JetBrains de Kotlin Coroutines — app desktop de contribuidores GitHub com progressão de implementações bloqueante → async/await → canais.
+- **[intro-coroutinesV2](DAM_TP4/intro-coroutinesV2):** Extensão do tutorial com implementação completa de Kotlin Flows (cold/hot, operadores, StateFlow).
+- **[AISimpleCalls](DAM_TP4/AISimpleCalls):** App Kotlin JVM com chamadas a APIs de IA (IAEdu proxy, GPT-4o, Claude 3.5) — streaming, análise de sentimento (Tasks 1–4).
+- **[GeminiImageApp](DAM_TP4/GeminiImageApp):** App Android de análise de imagens com Gemini Vision API (Task 5).
+- **[build-android-start](DAM_TP4/build-android-start):** Codelab Firebase FriendlyChat — chat em tempo real com Firebase Auth + Realtime Database + Storage.
+- **[NotesProXMLViews3](DAM_TP4/NotesProXMLViews3):** App Android de notas CRUD com Firebase Auth + Firestore e XML Views.
+
+---
+
 ## 👤 Autor
 - **Nome:** Hugo Spencer Pereira de Sousa
 - **Número de Aluno:** `a46104`
@@ -49,8 +61,10 @@ Pasta contentora de todos os componentes desenvolvidos para a terceira avaliaç�
 - **Linguagem:** Kotlin
 - **Ambientes:** IntelliJ IDEA & Android Studio
 - **Arquitetura:** MVVM (Model-View-ViewModel)
-- **APIs:** Fal.ai (Fast SDXL), Open-Meteo, Google Play Services Location, Dog CEO API
-- **Persistência:** Room (SQLite), SharedPreferences
+- **APIs:** Fal.ai (Fast SDXL), Open-Meteo, Google Play Services Location, Dog CEO API, OpenAI, Gemini, IAEdu proxy
+- **Persistência:** Room (SQLite), SharedPreferences, Firebase Firestore, Firebase Realtime Database
+- **Autenticação:** Firebase Auth
 - **UI:** XML Views, Jetpack Compose
 - **Rede:** Gson (Retrofit), Ktor, kotlinx.serialization
+- **Assincronismo:** Kotlin Coroutines, Kotlin Flows, StateFlow
 - **Processamento de Anotações:** KSP (Kotlin Symbol Processing)

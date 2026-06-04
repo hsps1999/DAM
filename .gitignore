@@ -29,3 +29,6 @@ desktop.ini
 
 # Local properties for Fal.ai
 local.properties
+
+# macOS archive metadata
+__MACOSX/
